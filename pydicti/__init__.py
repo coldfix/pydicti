@@ -5,16 +5,14 @@ Entries in a `dicti` can be accessed case invariantly:
 
     >>> keys = ['Hello', 'beautiful', 'world!']
     >>> values = [1, 2, 3]
-    >>> z = zip(keys, values)
+    >>> z = list(zip(keys, values))
     >>> i = dicti(z)
-    >>> "WorLD!" in i and "universe" not in i
-    True
+    >>> assert "WorLD!" in i and "universe" not in i
 
 However, the in calls like `.keys()` or `.items()` the keys are returned
 as in their original case:
 
-    >>> "Hello" in list(i.keys())
-    True
+    >>> assert "Hello" in list(i.keys())
 
 `dicti` can be "derived" from  another custom dictionary extension using
 it as the underlying dictionary to gain additional properties like order
@@ -23,46 +21,42 @@ preservation:
     >>> from collections import OrderedDict
     >>> odicti = build_dicti(OrderedDict)
     >>> oi = odicti(z)
-    >>> list(oi.keys())
-    ['Hello', 'beautiful', 'world!']
+    >>> assert list(oi.keys()) == keys
 
-The equality comparison preserves the semantics of the base type as best
-as  possible. This  has impact  on  the transitivity  of the  comparison
-operator:
+The equality  comparison preserves  the semantics of  the base  type and
+reflexitivity as best  as possible. This has impact  on the transitivity
+of the comparison operator:
 
-    >>> rz = zip(reversed(keys), reversed(values))
+    >>> rz = list(zip(reversed(keys), reversed(values)))
     >>> roi = odicti(rz)
-    >>> roi == i and i == oi and oi != roi
-    True
-
-The implementation  of the comparison  operator in `Dicti`  is reflexive
-for compatible types.
-
-    >>> oi == i and i == oi
-    True
+    >>> assert roi == i and i == oi
+    >>> assert oi != roi and roi != oi  # NOT transitive!
+    >>> assert oi == i and i == oi      # reflexive
 
 Be careful with reflexitivity when comparing non-`dicti` types:
 
-    >>> i == o and o != i
-    True
+    >>> o = OrderedDict(oi)
+    >>> oli = Dicti(oi.lower_dict())
+    >>> assert oli == o
+    >>> print(o == oli) # dependends on implementation of OrderedDict
+    >>> print(o.__eq__(oli))
 
 Note that `dicti` is the type corresponding to `builtins.dict`:
 
-    >>> build_dicti(dict) is dicti
-    True
+    >>> assert build_dicti(dict) is dicti
 
 The  method   `Dicti`  is  convenient  for   creating  case  insensitive
 dictionaries from a given object automatically using the objects type as
 the underlying dictionary type.
 
-    >>> oi
-    Dicti(OrderedDict([('Hello', 1), ('beautiful', 2), ('world!', 3)]))
-    >>> o = OrderedDict(zip(keys, values))
-    >>> oi == Dicti(o)
-    True
+    >>> assert oi == Dicti(o)
+    >>> assert type(oi) is type(Dicti(o))
 
-    >>> type(oi) is type(Dicti(o))
-    True
+The subclassing approach works well with "badly" written code as in `json`
+that checks for `isinstance(dict)`:
+
+    >>> import json
+    >>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
 
 """
 
@@ -91,16 +85,6 @@ def _make_dicti(dict_):
         `.lower()`-case  to  the  constructor,   to  `.update()`  or  to
         `.__eq__()` is undefined behaviour.
 
-            >>> keys = ['Hello', 'beautiful', 'world!']
-            >>> values = [1, 2, 3]
-            >>> i = dicti(zip(keys, values))
-            >>> "WORLD" in i
-            True
-            >>> "universe" in i
-            False
-            >>> "Hello" in list(i.keys())
-            True
-
         Note  that `dicti`  is  inherited  from `builtins.dict`  instead
         of   from   `collections.MutableMapping`.    This   means   that
         `isinstance(d,dict)` checks will  succeed and `json.dump()` will
@@ -117,11 +101,11 @@ def _make_dicti(dict_):
         """
 
         # Constructor:
-        def __init__(self, data={}, **kwargs):
+        def __init__(self, *args, **kwargs):
             """Initialize a case insensitive dictionary from the arguments."""
             dict_.__init__(self)
             self.__case = {}
-            self.update(data, **kwargs)
+            self.update(*args, **kwargs)
 
         # MutableMapping methods:
         def __getitem__(self, key):

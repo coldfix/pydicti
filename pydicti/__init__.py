@@ -1,53 +1,63 @@
 """
 Case insensitive dictionary on top of a user defined underlying dictionary.
 
-The case of the keys is preserved as they are set. However, entries can be
-accessed case invariantly.
+Entries in a `dicti` can be accessed case invariantly:
 
->>> keys = ['Hello', 'beautiful', 'world!']
->>> values = [1, 2, 3]
->>> i = dicti(zip(keys, values))
->>> "WORLD!" in i
-True
+    >>> from pydicti import dicti, build_dicti, Dicti
+    >>> keys = ['Hello', 'beautiful', 'world!']
+    >>> values = [1, 2, 3]
+    >>> z = list(zip(keys, values))
+    >>> i = dicti(z)
+    >>> assert "WorLD!" in i and "universe" not in i
 
->>> "universe" in i
-False
+However, the in calls like `.keys()` or `.items()` the keys are returned
+as in their original case:
 
->>> "Hello" in list(i.keys())
-True
+    >>> assert "Hello" in list(i.keys())
 
-``dicti`` can be "derived" from another custom dictionary extension using it
-as the underlying dictionary.
+`dicti` can be "derived" from  another custom dictionary extension using
+it as the underlying dictionary to gain additional properties like order
+preservation:
 
->>> from collections import OrderedDict
->>> odicti = build_dicti(OrderedDict)
->>> oi = odicti(zip(keys, values))
->>> "hELLo" in oi
-True
+    >>> from collections import OrderedDict
+    >>> odicti = build_dicti(OrderedDict)
+    >>> oi = odicti(z)
+    >>> assert list(oi.keys()) == keys
 
->>> list(oi.keys())
-['Hello', 'beautiful', 'world!']
+The equality  comparison preserves  the semantics of  the base  type and
+reflexitivity as best  as possible. This has impact  on the transitivity
+of the comparison operator:
 
->>> Dicti(o) == oi
-True
+    >>> rz = list(zip(reversed(keys), reversed(values)))
+    >>> roi = odicti(rz)
+    >>> assert roi == i and i == oi
+    >>> assert oi != roi and roi != oi  # NOT transitive!
+    >>> assert oi == i and i == oi      # reflexive
 
-Note that ``dicti`` is the type corresponding to ``builtins.dict``:
+Be careful with reflexitivity when comparing non-`dicti` types:
 
->>> build_dicti(dict) is dicti
-True
+    >>> o = OrderedDict(oi)
+    >>> oli = Dicti(oi.lower_dict())
+    >>> assert oli == o
+    >>> print(o == oli) # dependends on implementation of OrderedDict
+    >>> print(o.__eq__(oli))
 
-The method ``Dicti`` is convenient for creating case insensitive dictionaries
-from a given object automatically using the objects type as the underlying
-dictionary type.
+Note that `dicti` is the type corresponding to `builtins.dict`:
 
->>> oi
-Dicti(OrderedDict([('Hello', 1), ('beautiful', 2), ('world!', 3)]))
->>> o = OrderedDict(zip(keys, values))
->>> oi == Dicti(o)
-True
+    >>> assert build_dicti(dict) is dicti
 
->>> type(oi) is type(Dicti(o))
-True
+The  method   `Dicti`  is  convenient  for   creating  case  insensitive
+dictionaries from a given object automatically using the objects type as
+the underlying dictionary type.
+
+    >>> assert oi == Dicti(o)
+    >>> assert type(oi) is type(Dicti(o))
+
+The subclassing approach works well with "badly" written code as in `json`
+that checks for `isinstance(dict)`:
+
+    >>> import json
+    >>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
 
 """
 
@@ -56,9 +66,7 @@ from abc import ABCMeta
 
 # internally used to allow keys that are not strings
 def _lower(s):
-    """
-    Convert to lower case if possible.
-    """
+    """Convert to lower case if possible."""
     try:
         return s.lower()
     except AttributeError:
@@ -69,23 +77,28 @@ class _dicti(collections.MutableMapping):
     """
     Dictionary with case insensitive lookups.
 
-    Behaves like ``dict`` except that lookups are always done case
-    insensitive. Case sensitivity is retained in so far that ``.keys()`` etc
-    return the keys in their original form.
+    Behaves  like  `dict`  except  that lookups  are  always  done  case
+    insensitive. Case sensitivity is retained  in so far that calls like
+    `.keys()` or `.items()` return the keys in their original form.
 
-    Passing dictionaries that have multiple keys with equal ``.lower()``-case
-    to the constructor, to ``.update()`` or to ``.__eq__()`` is undefined
-    behaviour.
+    Passing   dictionaries   that   have  multiple   keys   with   equal
+    `.lower()`-case to the constructor, to `.update()` or to `.__eq__()`
+    is undefined behaviour.
 
-    >>> keys = ['Hello', 'beautiful', 'world!']
-    >>> values = [1, 2, 3]
-    >>> i = dicti(zip(keys, values))
-    >>> "WORLD" in i
-    True
-    >>> "universe" in i
-    False
-    >>> "Hello" in list(i.keys())
-    True
+    Note that `dicti` is inherited from `collections.MutableMapping` and
+    not from `builtins.dict`. This  means that `isinstance(dict)` checks
+    will fail and  hence `json.dump()` will not  work automatically with
+    `dicti` without some additional work.
+
+
+    Implementation rationale (known pitfalls):
+
+    When  subclassing  `builtins.dict`,  calling  `dict(Dicti(v))`  will
+    bypass the `__iter__`+`__getitem__` interface  and return the actual
+    dictionary. This means subclassing enforces us to use a two step key
+    lookup like  done below. This  may lead to performance  issues. Also
+    subclassing  has  some really  quirky  behaviour  when it  comes  to
+    comparison.
 
     """
 
@@ -162,16 +175,15 @@ class _dicti(collections.MutableMapping):
         """Iterate over (key,value) pairs with lowercase keys."""
         return ((k, v[1]) for k,v in self._data.items())
 
-
 _built_dicties = {}
 _super = {}
 def build_dicti(base):
     """
-    Create ``dicti`` class using ``base`` as the underlying dictionary.
+    Create `dicti` class using `base` as the underlying dictionary.
 
-    ``base`` is required to be a ``collections.MutableMapping``. If the class
-    has already been created, this will not create a new type, but rather
-    lookup the existing type in a table.
+    `base`  is required  to  be a  `collections.MutableMapping`. If  the
+    class has already been created, this will not create a new type, but
+    rather lookup the existing type in a table.
 
     """
     if base not in _built_dicties:
@@ -189,21 +201,21 @@ def build_dicti(base):
 
 def Dicti(obj):
     """
-    Create a case insensitive dictionary object from an existing dictionary.
+    Create case insensitive dictionary object from existing dictionary.
 
-    The type of ``obj`` is used as the type of the underlying dictionary for
-    the returned case insensitive dictionary.
+    The type of  `obj` is used as the type  of the underlying dictionary
+    for the returned case insensitive dictionary.
 
-    Since this method has the same name as was used to create the class within
-    ``build_dicti`` this allows ``str()`` representations to be invertible
-    without further work.
+    Since  this method  has the  same  name as  was used  to create  the
+    class within  `build_dicti` this  allows `repr()`-esentations  to be
+    invertible without further work.
 
     """
     return build_dicti(type(obj))(obj)
 
-# initialize ``build_dicti(dict)`` to be just ``dicti``
+# `dicti` is the default case insensitive dictionary
 dicti = build_dicti(dict)
 
-# ``odicti`` is an ordered, case insensitive dictionary type
+# `odicti` is an ordered, case insensitive dictionary type
 odicti = build_dicti(collections.OrderedDict)
 

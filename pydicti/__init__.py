@@ -52,6 +52,7 @@ True
 """
 
 import collections
+from abc import ABCMeta
 
 # internally used to allow keys that are not strings
 def _lower(s):
@@ -64,7 +65,7 @@ def _lower(s):
         return s
 
 # base class
-class dicti(collections.MutableMapping):
+class _dicti(collections.MutableMapping):
     """
     Dictionary with case insensitive lookups.
 
@@ -163,6 +164,7 @@ class dicti(collections.MutableMapping):
 
 
 _built_dicties = {}
+_super = {}
 def build_dicti(base):
     """
     Create ``dicti`` class using ``base`` as the underlying dictionary.
@@ -175,10 +177,14 @@ def build_dicti(base):
     if base not in _built_dicties:
         if not issubclass(base, collections.MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
-        class Dicti(dicti):
+        class Super(base, metaclass=ABCMeta):
+            pass
+        class Dicti(_dicti):
             pass
         Dicti.dict_ = base
         _built_dicties[base] = Dicti
+        Super.register(Dicti)
+        _super[base] = Super
     return _built_dicties[base]
 
 def Dicti(obj):
@@ -196,7 +202,7 @@ def Dicti(obj):
     return build_dicti(type(obj))(obj)
 
 # initialize ``build_dicti(dict)`` to be just ``dicti``
-_built_dicties[dict] = dicti
+dicti = build_dicti(dict)
 
 # ``odicti`` is an ordered, case insensitive dictionary type
 odicti = build_dicti(collections.OrderedDict)

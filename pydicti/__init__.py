@@ -26,7 +26,24 @@ preservation:
     >>> list(oi.keys())
     ['Hello', 'beautiful', 'world!']
 
-    >>> Dicti(o) == oi
+The equality comparison preserves the semantics of the base type as best
+as  possible. This  has impact  on  the transitivity  of the  comparison
+operator:
+
+    >>> rz = zip(reversed(keys), reversed(values))
+    >>> roi = odicti(rz)
+    >>> roi == i and i == oi and oi != roi
+    True
+
+The implementation  of the comparison  operator in `Dicti`  is reflexive
+for compatible types.
+
+    >>> oi == i and i == oi
+    True
+
+Be careful with reflexitivity when comparing non-`dicti` types:
+
+    >>> i == o and o != i
     True
 
 Note that `dicti` is the type corresponding to `builtins.dict`:
@@ -89,51 +106,60 @@ def _make_dicti(dict_):
         `isinstance(d,dict)` checks will  succeed and `json.dump()` will
         work automatically with `dicti`.
 
+
+        Implementation rationale (known pitfalls):
+
+        When subclassing `builtins.dict`,  calling `dict(Dicti(v))` will
+        bypass  the `__iter__`+`__getitem__`  interface  and return  the
+        actual dictionary. This  means subclassing enforces us  to use a
+        two step key lookup like done below.
+
         """
 
         # Constructor:
         def __init__(self, data={}, **kwargs):
             """Initialize a case insensitive dictionary from the arguments."""
             dict_.__init__(self)
+            self.__case = {}
             self.update(data, **kwargs)
 
         # MutableMapping methods:
         def __getitem__(self, key):
             """Get the value for `key` case insensitively."""
-            return dict_.__getitem__(self, _lower(key))[1]
+            return dict_.__getitem__(self, self.__case[_lower(key)])
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
-            dict_.__setitem__(self, _lower(key), (key, value))
+            lower = _lower(key)
+            if lower in self.__case:
+                dict_.__delitem__(self, self.__case[lower])
+            dict_.__setitem__(self, key, value)
+            self.__case[lower] = key
 
         def __delitem__(self, key):
             """Delete the item for `key` case insensitively."""
-            dict_.__delitem__(self, _lower(key))
+            lower = _lower(key)
+            dict_.__delitem__(self, self.__case[lower])
+            del self.__case[lower]
 
-        def __iter__(self):
-            """Iterate over all keys in their original case."""
-            return (dict_.__getitem__(self, k)[0]
-                    for k in dict_.__iter__(self))
+        def __contains__(self, key):
+            """Check if key is contained."""
+            return _lower(key) in self.__case
 
         # Implemented by `dict_`
+        # __iter__  # iterate in original case
         # __len__
+        # keys
+        # values
+        # items / iteritems
 
         # Implemented by `MutableMapping`:
-        __contains__ = collections.MutableMapping.__contains__
-        keys         = collections.MutableMapping.keys
-        values       = collections.MutableMapping.values
         get          = collections.MutableMapping.get
         pop          = collections.MutableMapping.pop
         popitem      = collections.MutableMapping.popitem
         clear        = collections.MutableMapping.clear
         update       = collections.MutableMapping.update
         setdefault   = collections.MutableMapping.setdefault
-
-        # python2 vs python3 pitfalls:
-        if hasattr(collections.MutableMapping, 'items'):
-            items = collections.MutableMapping.items
-        if hasattr(collections.MutableMapping, 'iteritems'):
-            iteritems = collections.MutableMapping.iteritems
 
         # Methods for polymorphism with `builtins.dict`:
         def copy(self):
@@ -173,7 +199,7 @@ def _make_dicti(dict_):
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
-            return ((k, self[k]) for k in dict_.__iter__(self))
+            return ((_lower(k), self[k]) for k in self)
 
         def lower_dict(self):
             """Return an underlying dictionary type with lowercase keys."""

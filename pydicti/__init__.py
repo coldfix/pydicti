@@ -3,6 +3,7 @@ Case insensitive dictionary on top of a user defined underlying dictionary.
 
 Entries in a `dicti` can be accessed case invariantly:
 
+    >>> from pydicti import dicti, build_dicti, Dicti
     >>> keys = ['Hello', 'beautiful', 'world!']
     >>> values = [1, 2, 3]
     >>> z = list(zip(keys, values))

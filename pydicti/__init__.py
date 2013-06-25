@@ -64,7 +64,7 @@ def _lower(s):
         return s
 
 # base class
-class dicti(collections.abc.MutableMapping):
+class dicti(collections.MutableMapping):
     """
     Dictionary with case insensitive lookups.
 
@@ -167,13 +167,13 @@ def build_dicti(base):
     """
     Create ``dicti`` class using ``base`` as the underlying dictionary.
 
-    ``base`` is required to be a ``collections.abc.MutableMapping``. If the
-    class has already been created, this will not create a new type, but rather
+    ``base`` is required to be a ``collections.MutableMapping``. If the class
+    has already been created, this will not create a new type, but rather
     lookup the existing type in a table.
 
     """
     if base not in _built_dicties:
-        if not issubclass(base, collections.abc.MutableMapping):
+        if not issubclass(base, collections.MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
         class Dicti(dicti):
             pass

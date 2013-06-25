@@ -1,30 +1,28 @@
 """
 Case insensitive dictionary on top of a user defined underlying dictionary.
 
-The case of the keys is preserved  as they are set. However, entries can
-be accessed case invariantly.
+Entries in a `dicti` can be accessed case invariantly:
 
     >>> keys = ['Hello', 'beautiful', 'world!']
     >>> values = [1, 2, 3]
-    >>> i = dicti(zip(keys, values))
-    >>> "WORLD!" in i
+    >>> z = zip(keys, values)
+    >>> i = dicti(z)
+    >>> "WorLD!" in i and "universe" not in i
     True
 
-    >>> "universe" not in i
-    True
+However, the in calls like `.keys()` or `.items()` the keys are returned
+as in their original case:
 
     >>> "Hello" in list(i.keys())
     True
 
 `dicti` can be "derived" from  another custom dictionary extension using
-it as the underlying dictionary.
+it as the underlying dictionary to gain additional properties like order
+preservation:
 
     >>> from collections import OrderedDict
     >>> odicti = build_dicti(OrderedDict)
-    >>> oi = odicti(zip(keys, values))
-    >>> "hELLo" in oi
-    True
-
+    >>> oi = odicti(z)
     >>> list(oi.keys())
     ['Hello', 'beautiful', 'world!']
 
@@ -55,9 +53,7 @@ import collections
 
 # internally used to allow keys that are not strings
 def _lower(s):
-    """
-    Convert to lower case if possible.
-    """
+    """Convert to lower case if possible."""
     try:
         return s.lower()
     except AttributeError:
@@ -125,7 +121,6 @@ def _make_dicti(dict_):
         # Implemented by `MutableMapping`:
         __contains__ = collections.MutableMapping.__contains__
         keys         = collections.MutableMapping.keys
-        items        = collections.MutableMapping.items
         values       = collections.MutableMapping.values
         get          = collections.MutableMapping.get
         pop          = collections.MutableMapping.pop
@@ -133,6 +128,12 @@ def _make_dicti(dict_):
         clear        = collections.MutableMapping.clear
         update       = collections.MutableMapping.update
         setdefault   = collections.MutableMapping.setdefault
+
+        # python2 vs python3 pitfalls:
+        if hasattr(collections.MutableMapping, 'items'):
+            items = collections.MutableMapping.items
+        if hasattr(collections.MutableMapping, 'iteritems'):
+            iteritems = collections.MutableMapping.iteritems
 
         # Methods for polymorphism with `builtins.dict`:
         def copy(self):
@@ -149,15 +150,13 @@ def _make_dicti(dict_):
             elif isinstance(other, type(self)):
                 return other == self
             elif isinstance(other, collections.MutableMapping):
-                if not hasattr(other, 'lower_items'):
+                if not hasattr(other, 'lower_dict'):
                     global Dicti
                     other = Dicti(other)
             else:
                 return NotImplemented
             # TODO: implement this with less copying
-            # NOTE: this discards comparison semantics defined in dict_ for
-            # the sake of reflexitivity:
-            return dict(self.lower_items()) == dict(other.lower_items())
+            return self.lower_dict() == other.lower_dict()
 
         def __copy__(self):
             """Create a copy of the dictionary."""
@@ -175,6 +174,11 @@ def _make_dicti(dict_):
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
             return ((k, self[k]) for k in dict_.__iter__(self))
+
+        def lower_dict(self):
+            """Return an underlying dictionary type with lowercase keys."""
+            # TODO: implement this as a view?
+            return dict_(self.lower_items())
 
     return Dicti
 

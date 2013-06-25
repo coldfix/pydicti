@@ -34,13 +34,17 @@ of the comparison operator:
     >>> assert oi != roi and roi != oi  # NOT transitive!
     >>> assert oi == i and i == oi      # reflexive
 
-Be careful with reflexitivity when comparing non-`dicti` types:
+Be careful  with reflexitivity when  comparing to non-`dicti`  types and
+even more so if both operands are  not subclasses of each other. Here it
+is important  to know about  coercion rules.  `o == oli`  actually calls
+`oli.__eq__(o)` if `oli` is of a subclass of the type of of `o`. See:
+
+http://docs.python.org/2/reference/datamodel.html#coercion-rules 
 
     >>> o = OrderedDict(oi)
     >>> oli = Dicti(oi.lower_dict())
-    >>> assert oli == o
-    >>> print(o == oli) # dependends on implementation of OrderedDict
-    >>> print(o.__eq__(oli))
+    >>> assert oli == o and o == oli    # reflexive (coercion rules)
+    >>> print(o.__eq__(oli))            # dependends on OrderedDict.__eq__
 
 Note that `dicti` is the type corresponding to `builtins.dict`:
 
@@ -53,8 +57,8 @@ the underlying dictionary type.
     >>> assert oi == Dicti(o)
     >>> assert type(oi) is type(Dicti(o))
 
-The subclassing approach works well with "badly" written code as in `json`
-that checks for `isinstance(dict)`:
+The  subclassing approach  works well  with "badly"  written code  as in
+`json` that checks for `isinstance(dict)`:
 
     >>> import json
     >>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
@@ -158,8 +162,6 @@ def _make_dicti(dict_):
             """Compare values using case insensitive keys."""
             if type(other) is type(self):
                 pass
-            elif isinstance(other, type(self)):
-                return other == self
             elif isinstance(other, collections.MutableMapping):
                 if not hasattr(other, 'lower_dict'):
                     global Dicti

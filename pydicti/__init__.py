@@ -173,7 +173,7 @@ def _make_dicti(dict_):
 
         def __copy__(self):
             """Create a copy of the dictionary."""
-            return self.__class__(self.values())
+            return self.__class__(self)
 
         def __repr__(self):
             """Representation string. Usually `dicti` or `Dicti(type)`."""
@@ -186,7 +186,7 @@ def _make_dicti(dict_):
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
-            return ((_lower(k), self[k]) for k in self)
+            return ((_lower(k), v) for k,v in self.items())
 
         def lower_dict(self):
             """Return an underlying dictionary type with lowercase keys."""

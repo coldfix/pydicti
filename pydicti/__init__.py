@@ -3,7 +3,6 @@ Case insensitive dictionary on top of a user defined underlying dictionary.
 
 Entries in a `dicti` can be accessed case invariantly:
 
-    >>> from pydicti import dicti, build_dicti, Dicti
     >>> keys = ['Hello', 'beautiful', 'world!']
     >>> values = [1, 2, 3]
     >>> z = list(zip(keys, values))
@@ -45,6 +44,7 @@ http://docs.python.org/2/reference/datamodel.html#coercion-rules
     >>> oli = Dicti(oi.lower_dict())
     >>> assert oli == o and o == oli    # reflexive (coercion rules)
     >>> print(o.__eq__(oli))            # dependends on OrderedDict.__eq__
+    False
 
 Note that `dicti` is the type corresponding to `builtins.dict`:
 
@@ -231,4 +231,11 @@ dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
 odicti = build_dicti(collections.OrderedDict)
+
+
+# Execute the doctests if run from the command line.
+# Verbose tests: python __init__.py -v
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 

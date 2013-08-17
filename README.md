@@ -37,6 +37,7 @@ values = [1, 2, 3]
 z = list(zip(keys, values))
 i = dicti(z)
 assert "WorLD!" in i and "universe" not in i
+assert i.get('hEllo') == 1
 ```
 
 However, the in calls like `.keys()` or `.items()` the keys are returned

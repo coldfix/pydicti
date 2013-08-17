@@ -31,6 +31,7 @@ Entries in a `dicti` can be accessed case invariantly:
 >>> z = list(zip(keys, values))
 >>> i = dicti(z)
 >>> assert "WorLD!" in i and "universe" not in i
+>>> assert i.get('hEllo') == 1
 
 However, the in calls like `.keys()` or `.items()` the keys are returned
 as in their original case:

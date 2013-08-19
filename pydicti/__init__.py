@@ -5,8 +5,7 @@ Entries in a `dicti` can be accessed case invariantly:
 
     >>> keys = ['Hello', 'beautiful', 'world!']
     >>> values = [1, 2, 3]
-    >>> z = zip(keys, values)
-    >>> i = dicti(z)
+    >>> i = dicti(zip(keys, values))
     >>> "WorLD!" in i and "universe" not in i
     True
 
@@ -22,12 +21,9 @@ preservation:
 
     >>> from collections import OrderedDict
     >>> odicti = build_dicti(OrderedDict)
-    >>> oi = odicti(z)
+    >>> oi = odicti(zip(keys, values))
     >>> list(oi.keys())
     ['Hello', 'beautiful', 'world!']
-
-    >>> Dicti(o) == oi
-    True
 
 Note that `dicti` is the type corresponding to `builtins.dict`:
 
@@ -77,7 +73,7 @@ def _make_dicti(dict_):
             >>> keys = ['Hello', 'beautiful', 'world!']
             >>> values = [1, 2, 3]
             >>> i = dicti(zip(keys, values))
-            >>> "WORLD" in i
+            >>> "WORLD!" in i
             True
             >>> "universe" in i
             False
@@ -218,4 +214,5 @@ dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
 odicti = build_dicti(collections.OrderedDict)
+
 

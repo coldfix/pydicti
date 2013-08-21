@@ -124,9 +124,16 @@ def _make_dicti(dict_):
         Implementation rationale (known pitfalls):
 
         When subclassing `builtins.dict`,  calling `dict(Dicti(v))` will
-        bypass  the `__iter__`+`__getitem__`  interface  and return  the
-        actual dictionary. This  means subclassing enforces us  to use a
-        two step key lookup like done below.
+        bypass  the `__iter__`+`__getitem__`  interface  and access  the
+        'internal' (inherited) dictionary. See:
+
+        http://stackoverflow.com/questions/18317905/overloaded-iter-is-bypassed-when-deriving-from-dict
+
+        When subclassing  `dict, it  is therefore  necessary to  set the
+        internal dictionary such  that it can be  converted back without
+        problem. This easiest  way to do this is a  two step key lookup.
+        The  internal dictionary  stores  (original_case  => value)  and
+        another is used to store (lower_case => original_case).
 
         """
 

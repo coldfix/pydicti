@@ -89,6 +89,7 @@ The  subclassing approach  works well  with "badly"  written code  as in
 >>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
 
 """
+__all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import collections
 

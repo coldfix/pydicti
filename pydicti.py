@@ -89,6 +89,7 @@ The  subclassing approach  works well  with "badly"  written code  as in
 >>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
 
 """
+__all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import collections
 
@@ -129,7 +130,7 @@ def _make_dicti(dict_):
 
         http://stackoverflow.com/questions/18317905/overloaded-iter-is-bypassed-when-deriving-from-dict
 
-        When subclassing  `dict, it  is therefore  necessary to  set the
+        When subclassing  `dict`, it is  therefore necessary to  set the
         internal dictionary such  that it can be  converted back without
         problem. This easiest  way to do this is a  two step key lookup.
         The  internal dictionary  stores  (original_case  => value)  and

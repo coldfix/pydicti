@@ -92,6 +92,7 @@ The  subclassing approach  works well  with "badly"  written code  as in
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import collections
+from copy import deepcopy
 
 # internally used to allow keys that are not strings
 def _lower(s):
@@ -185,6 +186,7 @@ def _make_dicti(dict_):
 
         # Methods for polymorphism with `builtins.dict`:
         def copy(self):
+            """Create a copy of the dictionary."""
             return self.__copy__()
 
         def iter(self):
@@ -207,6 +209,13 @@ def _make_dicti(dict_):
         def __copy__(self):
             """Create a copy of the dictionary."""
             return self.__class__(self)
+
+        def __deepcopy__(self, memo):
+            """Create a deep copy of the dictionary."""
+            copy = self.__class__()
+            for k,v in self.items():
+                copy[k] = deepcopy(v, memo)
+            return copy
 
         def __repr__(self):
             """Representation string. Usually `dicti` or `Dicti(type)`."""

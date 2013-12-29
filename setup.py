@@ -3,17 +3,11 @@
 
 from distutils.core import setup
 
-try:
-    long_description = open('README.rst').read()
-except:
-    long_description = None
-
-# invoke distutils
 setup(
     name='pydicti',
     version='0.0.1',
     description='Case insensitive derivable dictionary',
-    long_description=long_description,
+    long_description=open('README.rst').read(),
     author='Thomas Gläßle',
     author_email='t_glaessle@gmx.de',
     url='https://github.com/coldfix/pydicti',

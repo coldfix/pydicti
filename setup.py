@@ -3,11 +3,8 @@
 
 from distutils.core import setup
 
-# read long_description from README.rst
 try:
-    f = open('README.rst')
-    long_description = f.read()
-    f.close()
+    long_description = open('README.rst').read()
 except:
     long_description = None
 
@@ -21,8 +18,7 @@ setup(
     author_email='t_glaessle@gmx.de',
     url='https://github.com/coldfix/pydicti',
     license='Public Domain',
-    py_modules=[
-        'pydicti',],
+    py_modules=['pydicti'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

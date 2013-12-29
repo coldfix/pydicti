@@ -63,7 +63,7 @@ even more so if both operands are  not subclasses of each other. Here it
 is important  to know about  coercion rules.  `o == oli`  actually calls
 `oli.__eq__(o)` if `oli` is of a subclass of the type of of `o`. See:
 
-http://docs.python.org/2/reference/datamodel.html#coercion-rules 
+http://docs.python.org/2/reference/datamodel.html#coercion-rules
 
 >>> o = OrderedDict(oi)
 >>> oli = Dicti(oi.lower_dict())
@@ -92,6 +92,7 @@ The  subclassing approach  works well  with "badly"  written code  as in
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import collections
+from collections import MutableMapping, OrderedDict
 from copy import deepcopy
 
 # internally used to allow keys that are not strings
@@ -178,11 +179,11 @@ def _make_dicti(dict_):
         # items / iteritems
 
         # Implemented by `MutableMapping`:
-        get          = collections.MutableMapping.get
-        popitem      = collections.MutableMapping.popitem
-        clear        = collections.MutableMapping.clear
-        update       = collections.MutableMapping.update
-        setdefault   = collections.MutableMapping.setdefault
+        get          = MutableMapping.get
+        popitem      = MutableMapping.popitem
+        clear        = MutableMapping.clear
+        update       = MutableMapping.update
+        setdefault   = MutableMapping.setdefault
 
         def pop(self, key, default=_marker):
             """
@@ -214,7 +215,7 @@ def _make_dicti(dict_):
             """Compare values using case insensitive keys."""
             if type(other) is type(self):
                 pass
-            elif isinstance(other, collections.MutableMapping):
+            elif isinstance(other, MutableMapping):
                 if not hasattr(other, 'lower_dict'):
                     global Dicti
                     other = Dicti(other)
@@ -266,7 +267,7 @@ def build_dicti(base):
 
     """
     if base not in _built_dicties:
-        if not issubclass(base, collections.MutableMapping):
+        if not issubclass(base, MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
         _built_dicties[base] = _make_dicti(base)
     return _built_dicties[base]
@@ -289,7 +290,7 @@ def Dicti(obj):
 dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
-odicti = build_dicti(collections.OrderedDict)
+odicti = build_dicti(OrderedDict)
 
 
 # Execute the doctests if run from the command line.

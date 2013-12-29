@@ -24,3 +24,7 @@ class Test_pydicti(unittest.TestCase):
         self.assertIsNot(c['h'], self.i['h'])
         self.assertEqual(c['h'], self.i['h'])
 
+    def test_pop(self):
+        self.assertEqual(self.i.pop('A'), 0)
+        self.assertRaises(KeyError, self.i.pop, 'A')
+        self.assertEqual(self.i.pop('A', 5), 5)

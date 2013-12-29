@@ -103,6 +103,7 @@ def _lower(s):
 
 # make class
 def _make_dicti(dict_):
+    _marker = []
     class Dicti(dict_):
         """
         Dictionary with case insensitive lookups.
@@ -177,11 +178,27 @@ def _make_dicti(dict_):
 
         # Implemented by `MutableMapping`:
         get          = collections.MutableMapping.get
-        pop          = collections.MutableMapping.pop
         popitem      = collections.MutableMapping.popitem
         clear        = collections.MutableMapping.clear
         update       = collections.MutableMapping.update
         setdefault   = collections.MutableMapping.setdefault
+
+        def pop(self, key, default=_marker):
+            """
+            Remove specified key and return the corresponding value.
+
+            If the default parameter is given, it will be returned in case
+            the key is not in the dictionary. Otherwise, a KeyError will be
+            raised.
+
+            """
+            if key in self:
+                result = self[key]
+                del self[key]
+                return result
+            if default is _marker:
+                raise KeyError(key)
+            return default
 
         # Methods for polymorphism with `builtins.dict`:
         def copy(self):

@@ -5,7 +5,7 @@ from distutils.core import setup
 
 setup(
     name='pydicti',
-    version='0.0.1',
+    version='0.0.2',
     description='Case insensitive derivable dictionary',
     long_description=open('README.rst').read(),
     author='Thomas Gläßle',

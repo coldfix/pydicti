@@ -1,1 +1,1 @@
-include README.md COPYING LICENSE test_pydicti.py
+include README.rst COPYING LICENSE test_pydicti.py

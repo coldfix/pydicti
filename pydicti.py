@@ -92,7 +92,7 @@ The  subclassing approach  works well  with "badly"  written code  as in
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import collections
-from collections import MutableMapping, OrderedDict
+from collections import MutableMapping
 from copy import deepcopy
 
 # internally used to allow keys that are not strings
@@ -290,7 +290,12 @@ def Dicti(obj):
 dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
-odicti = build_dicti(OrderedDict)
+try:
+    from collections import OrderedDict
+except ImportError:
+    pass
+else:
+    odicti = build_dicti(OrderedDict)
 
 
 # Execute the doctests if run from the command line.

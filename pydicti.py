@@ -378,5 +378,6 @@ else:
 # Verbose tests: python __init__.py -v
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    fail, total = doctest.testmod()
+    exit(fail)
 

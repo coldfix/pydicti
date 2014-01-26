@@ -3,7 +3,146 @@
 Case insensitive derivable dictionary.
 
 
-### License
+Installation
+~~~~~~~~~~~~
+
+You can install the newest version of *pydicti* from PyPI:
+
+.. code:: bash
+
+    pip install pydicti
+
+Alternatively, you can just take the file ``pydicti.py`` and redistribute
+it with your application.
+
+
+Overview
+~~~~~~~~
+
+- ``class dicti``: default case insensitive dictionary type
+- ``class odicti``: ordered case insensitive dictionary type
+- ``def build_dicti``: create a case insensitive dictionary class
+- ``def Dicti``: create a case insensitive copy of a dictionary
+
+dicti
+=====
+
+Object of type ``dicti`` are dictionaries that feature case insensitive
+item access:
+
+.. code:: python
+
+    >>> d = dicti(Hello='foo', world='bar')
+    >>> d['heLLO']
+    'foo'
+    >>> 'WOrld' in d
+    True
+
+Internally however, the keys retain their original case:
+
+.. code:: python
+
+    >>> sorted(d.keys())
+    ['Hello', 'world']
+
+odicti
+======
+
+The type ``odicti`` instanciates order-preserving case insensitive
+dictionaries. It is available if either `collections.OrderedDict`_ or
+`ordereddict.OrderedDict`_ exists:
+
+.. code:: python
+
+    >>> odicti(zip('abc', range(3)))
+    Dicti(OrderedDict([('a', 0), ('b', 1), ('c', 2)]))
+
+.. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
+.. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
+
+build_dicti
+===========
+
+With ``build_dicti`` you can create custom case insensitive dictionaries.
+This function is what is used to create the ``pydicti.dicti`` and
+``pydicti.odicti`` types. Note that calling ``build_dicti`` several times
+with the same argument will result in identical types:
+
+.. code:: python
+
+    >>> build_dicti(dict) is dicti
+    True
+    >>> build_dicti(OrderedDict) is odicti
+    True
+
+``build_dicti`` uses subclassing to inherit the semantics of the given base
+dictionary type:
+
+.. code:: python
+
+    >>> issubclass(odicti, OrderedDict)
+    True
+
+Dicti
+=====
+
+The function ``Dicti`` is convenient for creating case insensitive
+copies of dictionary instances:
+
+.. code:: python
+
+    >>> o = OrderedDict(zip('abcdefg', range(7)))
+    >>> oi = Dicti(o)
+    >>> type(oi) is odicti
+    True
+
+
+JSON
+~~~~
+
+The subclassing approach allows to plug your dictionary instance into
+places where typechecking with ``isinstance`` is used, like in the json_
+module:
+
+.. code:: python
+
+    >>> import json
+    >>> d == json.loads(json.dumps(d), object_hook=dicti)
+    True
+
+.. _json: http://docs.python.org/3.3/library/json.html
+
+Above python26 you can use ``json.loads(s, object_pairs_hook=odicti)`` to
+deserialize ordered dictionaries.
+
+
+Pitfalls
+~~~~~~~~
+
+The equality comparison tries preserves the semantics of the base type as
+well as reflexitivity. This has impact on the transitivity of the
+comparison operator:
+
+.. code:: python
+
+    >>> i = dicti(oi)
+    >>> roi = odicti(reversed(list(oi.items())))
+    >>> roi == i and i == oi
+    True
+    >>> oi != roi and roi != oi  # NOT transitive!
+    True
+    >>> oi == i and i == oi      # reflexive
+    True
+
+The `coercion rules`_ in python allow this to work pretty well when
+performing comparisons between types that are subclasses of each other. Be
+careful otherwise, however.
+
+.. _`coercion rules`: http://docs.python.org/2/reference/datamodel.html#coercion-rules
+
+
+License
+~~~~~~~
 
 Copyright © 2013 Thomas Gläßle <t_glaessle@gmx.de>
 
@@ -13,92 +152,6 @@ published by Sam Hocevar. See the COPYING file for more details.
 
 This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
-
-
-### Installation
-
-You can install the newest version of *pydicti* from PyPI:
-
-```bash
-pip install pydicti
-```
-
-Alternatively, you can take the file `pydicti.py` and redistribute it with
-your application.
-
-
-### Global namespace
-
- - `def build_dicti(base)`: derive case insensitive dictionary class
- - `def Dicti(obj)`: create ci-dict instance using obj's class as base
- - `class dicti = build_dicti(dict)` standard ci-dict
- - `class odicti = build_odicti(OrderedDict)` ordered ci-dict
-
-
-### Overview
-
-Entries in a `dicti` can be accessed case invariantly:
-
->>> keys = ['Hello', 'beautiful', 'world!']
->>> values = [1, 2, 3]
->>> z = list(zip(keys, values))
->>> i = dicti(z)
->>> assert "WorLD!" in i and "universe" not in i
->>> assert i.get('hEllo') == 1
-
-However, the in calls like `.keys()` or `.items()` the keys are returned
-as in their original case:
-
->>> assert "Hello" in list(i.keys())
-
-`dicti` can be "derived" from  another custom dictionary extension using
-it as the underlying dictionary to gain additional properties like order
-preservation:
-
->>> from collections import OrderedDict
->>> odicti = build_dicti(OrderedDict)
->>> oi = odicti(z)
->>> assert list(oi.keys()) == keys
-
-The equality  comparison preserves  the semantics of  the base  type and
-reflexitivity as best  as possible. This has impact  on the transitivity
-of the comparison operator:
-
->>> rz = list(zip(reversed(keys), reversed(values)))
->>> roi = odicti(rz)
->>> assert roi == i and i == oi
->>> assert oi != roi and roi != oi  # NOT transitive!
->>> assert oi == i and i == oi      # reflexive
-
-Be careful  with reflexitivity when  comparing to non-`dicti`  types and
-even more so if both operands are  not subclasses of each other. Here it
-is important  to know about  coercion rules.  `o == oli`  actually calls
-`oli.__eq__(o)` if `oli` is of a subclass of the type of `o`. See:
-
-http://docs.python.org/2/reference/datamodel.html#coercion-rules
-
->>> o = OrderedDict(oi)
->>> oli = Dicti(oi.lower_dict())
->>> assert oli == o and o == oli    # reflexive (coercion rules)
->>> print(o.__eq__(oli))            # dependends on OrderedDict.__eq__
-False
-
-Note that `dicti` is the type corresponding to `builtins.dict`:
-
->>> assert build_dicti(dict) is dicti
-
-The  method   `Dicti`  is  convenient  for   creating  case  insensitive
-dictionaries from a given object automatically using the objects type as
-the underlying dictionary type.
-
->>> assert oi == Dicti(o)
->>> assert type(oi) is type(Dicti(o))
-
-The  subclassing approach  works well  with "badly"  written code  as in
-`json` that checks for `isinstance(dict)`:
-
->>> import json
->>> assert oi == json.loads(json.dumps(oi), object_pairs_hook=odicti)
 
 """
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']

@@ -3,9 +3,12 @@ CHANGELOG
 
 0.0.3 (in preparation)
 =====
-- make dependency on ``OrderedDict`` optional
 - add support for python26
+- make dependency on ``OrderedDict`` optional
 - migrate to setuptools in order to use testing commands
+- support `ordereddict.OrderedDict`_ as fallback
+
+.. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
 
 0.0.2
 =====

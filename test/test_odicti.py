@@ -1,12 +1,21 @@
-from test_compat import TestCase
-from copy import copy, deepcopy
+import unittest
+from test.test_compat import TestCase
+from json import loads, dumps
 
 try:
-    from pydicti import dicti, odicti, Dicti, build_dicti
-    from collections import OrderedDict
+    from pydicti import dicti, odicti, Dicti, build_dicti, OrderedDict
 except ImportError:
     # Drop this test if OrderedDict can not be imported (py26):
+    print("Skipping test: test_odicti.py")
     __test__ = False
+
+try:
+    loads('{}', object_pairs_hook=dict)
+except TypeError:
+    json_has_object_pairs_hook = False
+else:
+    json_has_object_pairs_hook = True
+
 
 class Test_odicti(TestCase):
     def setUp(self):
@@ -36,8 +45,10 @@ class Test_odicti(TestCase):
         self.assertIs(odicti, build_dicti(OrderedDict))
         self.assertIs(type(self.o), type(Do))
 
-    def test_json(self):
-        from json import loads, dumps
-        self.assertEqual(self.o,
-                         loads(dumps(self.o), object_pairs_hook=odicti))
+    if json_has_object_pairs_hook:
+        def test_json(self):
+            self.assertEqual(self.o,
+                            loads(dumps(self.o), object_pairs_hook=odicti))
 
+if __name__ == '__main__':
+    unittest.main()

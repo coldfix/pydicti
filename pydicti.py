@@ -209,8 +209,9 @@ def _make_dicti(dict_):
         # Constructor:
         def __init__(self, *args, **kwargs):
             """Initialize a case insensitive dictionary from the arguments."""
+            self.__case = {}        # create this member ASAP since
+                                    # dict_.__init__() might call self.clear()
             dict_.__init__(self)
-            self.__case = {}
             self.update(*args, **kwargs)
 
         # MutableMapping methods:
@@ -246,9 +247,12 @@ def _make_dicti(dict_):
         # Implemented by `MutableMapping`:
         get          = MutableMapping.get
         popitem      = MutableMapping.popitem
-        clear        = MutableMapping.clear
         update       = MutableMapping.update
         setdefault   = MutableMapping.setdefault
+
+        def clear(self):
+            dict_.clear(self)
+            self.__case.clear()
 
         def pop(self, key, default=_marker):
             """
@@ -358,6 +362,13 @@ dicti = build_dicti(dict)
 try:
     from collections import OrderedDict
 except ImportError:
+    try:
+        from ordereddict import OrderedDict
+    except ImportError:
+        pass
+try:
+    OrderedDict
+except NameError:
     pass
 else:
     odicti = build_dicti(OrderedDict)
@@ -367,5 +378,6 @@ else:
 # Verbose tests: python __init__.py -v
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    fail, total = doctest.testmod()
+    exit(fail)
 

@@ -1,6 +1,7 @@
 import unittest
 from test.test_compat import TestCase
 from copy import copy, deepcopy
+from json import loads, dumps
 
 from pydicti import dicti
 
@@ -28,6 +29,10 @@ class Test_pydicti(TestCase):
         self.assertEqual(self.i.pop('A'), 0)
         self.assertRaises(KeyError, self.i.pop, 'A')
         self.assertEqual(self.i.pop('A', 5), 5)
+
+    def test_json(self):
+        self.assertEqual(self.i,
+                         loads(dumps(self.i), object_hook=dicti))
 
 if __name__ == '__main__':
     unittest.main()

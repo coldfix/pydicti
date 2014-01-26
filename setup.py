@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from setuptools import setup
 
-from distutils.core import setup
+tests_require = ['nose']
+# Care for testing on python26:
+try:
+    from collections import OrderedDict
+except ImportError:
+    tests_require.append('ordereddict')
+
+# see: http://bugs.python.org/issue15881#msg170215
+try:
+    import multiprocessing
+except ImportError:
+    pass
 
 setup(
     name='pydicti',
@@ -13,6 +25,8 @@ setup(
     url='https://github.com/coldfix/pydicti',
     license='Public Domain',
     py_modules=['pydicti'],
+    tests_require=tests_require,
+    test_suite='nose.collector',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

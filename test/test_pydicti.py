@@ -20,6 +20,13 @@ class Test_pydicti(TestCase):
         self.assertEqual(c['a'], 5)
         self.assertEqual(self.i['a'], 6)
 
+    def test_setitem(self):
+        i = dicti(a=0)
+        i['a'] = 1
+        self.assertEqual(i['a'], 1)
+        i['a'] = 2
+        self.assertEqual(i['a'], 2)
+
     def test_deepcopy(self):
         c = deepcopy(self.i)
         self.assertIsNot(c['h'], self.i['h'])

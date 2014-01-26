@@ -221,11 +221,10 @@ def _make_dicti(dict_):
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
-            lower = _lower(key)
-            if lower in self.__case:
-                dict_.__delitem__(self, self.__case[lower])
+            if key in self:
+                del self[key]
             dict_.__setitem__(self, key, value)
-            self.__case[lower] = key
+            self.__case[_lower(key)] = key
 
         def __delitem__(self, key):
             """Delete the item for `key` case insensitively."""

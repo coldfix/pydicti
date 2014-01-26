@@ -31,6 +31,13 @@ class Test_odicti(TestCase):
         self.assertEqual(self.k, list(self.o.keys()))
         self.assertEqual(self.v, list(self.o.values()))
 
+    def test_setitem(self):
+        o = odicti(a=0)
+        o['a'] = 1
+        self.assertEqual(o['a'], 1)
+        o['a'] = 2
+        self.assertEqual(o['a'], 2)
+
     def test_reflexitivity(self):
         self.assertEqual(self.r, self.i)
         self.assertEqual(self.i, self.r)

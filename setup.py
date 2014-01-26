@@ -23,6 +23,8 @@ try:
 except ImportError:
     tests_require.append('ordereddict')
     extras_require['odicti'] = ['ordereddict']
+else:
+    extras_require['odicti'] = []
 
 setup(
     name='pydicti',

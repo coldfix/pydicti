@@ -6,4 +6,9 @@ python:
   - "3.3"
   - "pypy"
 script:
-  - python pydicti.py
+  # check that the script works as a drop in:
+  - python setup.py test
+  # now lets do all the tests including doctests and tests for odicti:
+  - pip install -e .[odicti]
+  - pip install nose
+  - python setup.py nosetests

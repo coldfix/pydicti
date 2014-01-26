@@ -2,6 +2,14 @@
 # encoding: utf-8
 from setuptools import setup
 
+# prepare long_description for PyPI:
+long_description = None
+try:
+    long_description = open('README.rst').read()
+    long_description += '\n' + open('CHANGES.rst').read()
+except IOError:
+    pass
+
 tests_require = ['nose']
 # Care for testing on python26:
 try:
@@ -19,7 +27,7 @@ setup(
     name='pydicti',
     version='0.0.2',
     description='Case insensitive derivable dictionary',
-    long_description=open('README.rst').read(),
+    long_description=long_description,
     author='Thomas Gläßle',
     author_email='t_glaessle@gmx.de',
     url='https://github.com/coldfix/pydicti',

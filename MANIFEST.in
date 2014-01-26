@@ -1,2 +1,2 @@
-include README.rst COPYING LICENSE
+include README.rst CHANGES.rst COPYING LICENSE
 recursive-include test *.py

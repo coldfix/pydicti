@@ -15,6 +15,18 @@ This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
 
 
+### Installation
+
+You can install the newest version of *pydicti* from PyPI:
+
+```bash
+pip install pydicti
+```
+
+Alternatively, you can take the file `pydicti.py` and redistribute it with
+your application.
+
+
 ### Global namespace
 
  - `def build_dicti(base)`: derive case insensitive dictionary class

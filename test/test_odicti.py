@@ -1,5 +1,5 @@
-from test_compat import TestCase
-from copy import copy, deepcopy
+import unittest
+from test.test_compat import TestCase
 
 try:
     from pydicti import dicti, odicti, Dicti, build_dicti
@@ -41,3 +41,5 @@ class Test_odicti(TestCase):
         self.assertEqual(self.o,
                          loads(dumps(self.o), object_pairs_hook=odicti))
 
+if __name__ == '__main__':
+    unittest.main()

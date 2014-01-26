@@ -1,4 +1,5 @@
-from test_compat import TestCase
+import unittest
+from test.test_compat import TestCase
 from copy import copy, deepcopy
 
 from pydicti import dicti
@@ -27,3 +28,6 @@ class Test_pydicti(TestCase):
         self.assertEqual(self.i.pop('A'), 0)
         self.assertRaises(KeyError, self.i.pop, 'A')
         self.assertEqual(self.i.pop('A', 5), 5)
+
+if __name__ == '__main__':
+    unittest.main()

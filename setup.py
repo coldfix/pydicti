@@ -28,7 +28,7 @@ else:
 
 setup(
     name='pydicti',
-    version='0.0.2',
+    version='0.0.3',
     description='Case insensitive derivable dictionary',
     long_description=long_description,
     author='Thomas Gläßle',
@@ -40,7 +40,7 @@ setup(
     tests_require=tests_require,
     test_suite='nose.collector',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',

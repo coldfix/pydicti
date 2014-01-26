@@ -358,6 +358,13 @@ dicti = build_dicti(dict)
 try:
     from collections import OrderedDict
 except ImportError:
+    try:
+        from ordereddict import OrderedDict
+    except ImportError:
+        pass
+try:
+    OrderedDict
+except NameError:
     pass
 else:
     odicti = build_dicti(OrderedDict)

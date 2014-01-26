@@ -18,7 +18,7 @@ extent permitted by applicable law.
 Global namespace
 ~~~~~~~~~~~~~~~~
 
--  ``def build_diciti(base)``: derive case insensitive dictionary class
+-  ``def build_dicti(base)``: derive case insensitive dictionary class
 -  ``def Dicti(obj)``: create ci-dict instance using obj's class as base
 -  ``class dicti = build_dicti(dict)`` standard ci-dict
 -  ``class odicti = build_odicti(OrderedDict)`` ordered ci-dict
@@ -70,7 +70,7 @@ of the comparison operator:
 Be careful with reflexitivity when comparing to non-\ ``dicti`` types
 and even more so if both operands are not subclasses of each other. Here
 it is important to know about coercion rules. ``o == oli`` actually
-calls ``oli.__eq__(o)`` if ``oli`` is of a subclass of the type of of
+calls ``oli.__eq__(o)`` if ``oli`` is of a subclass of the type of
 ``o``. See:
 
 http://docs.python.org/2/reference/datamodel.html#coercion-rules

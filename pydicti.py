@@ -221,6 +221,8 @@ def _make_dicti(dict_):
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
+            # NOTE: this must be executed BEFORE dict_.__setitem__ in order
+            # to leave a consistent state for base method:
             if key in self:
                 del self[key]
             dict_.__setitem__(self, key, value)
@@ -230,6 +232,8 @@ def _make_dicti(dict_):
             """Delete the item for `key` case insensitively."""
             lower = _lower(key)
             dict_.__delitem__(self, self.__case[lower])
+            # NOTE: this must be executed AFTER dict_.__delitem__ in order
+            # to leave a consistent state for base method:
             del self.__case[lower]
 
         def __contains__(self, key):
@@ -250,7 +254,10 @@ def _make_dicti(dict_):
         setdefault   = MutableMapping.setdefault
 
         def clear(self):
+            """Remove all entries from the dictionary."""
             dict_.clear(self)
+            # NOTE: this must be executed AFTER dict_.clear in order to
+            # leave a consistent state for base method:
             self.__case.clear()
 
         def pop(self, key, default=_marker):
@@ -276,6 +283,7 @@ def _make_dicti(dict_):
             return self.__copy__()
 
         def iter(self):
+            """Return iterator over all keys in their original case."""
             return iter(self.__iter__())
 
         # Standard operations:

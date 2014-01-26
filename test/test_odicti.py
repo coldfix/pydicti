@@ -2,8 +2,7 @@ import unittest
 from test.test_compat import TestCase
 
 try:
-    from pydicti import dicti, odicti, Dicti, build_dicti
-    from collections import OrderedDict
+    from pydicti import dicti, odicti, Dicti, build_dicti, OrderedDict
 except ImportError:
     # Drop this test if OrderedDict can not be imported (py26):
     __test__ = False

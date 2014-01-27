@@ -1,6 +1,6 @@
 pydicti
 -------
-|Build Status| |Version| |Downloads| |License|
+|Build Status| |Coverage| |Version| |Downloads| |License|
 
 Installation
 ~~~~~~~~~~~~
@@ -165,3 +165,6 @@ extent permitted by applicable law.
    :target: https://travis-ci.org/coldfix/pydicti
    :alt: Build Status
 
+.. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.png?branch=master
+   :target: https://coveralls.io/r/coldfix/pydicti
+   :alt: Coverage

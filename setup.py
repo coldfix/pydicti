@@ -15,13 +15,11 @@ try:
 except IOError:
     pass
 
-tests_require = ['nose']
-extras_require = {}
 # Care for testing on python26:
+extras_require = {}
 try:
     from collections import OrderedDict
 except ImportError:
-    tests_require.append('ordereddict')
     extras_require['odicti'] = ['ordereddict']
 else:
     extras_require['odicti'] = []
@@ -37,8 +35,8 @@ setup(
     license='Public Domain',
     py_modules=['pydicti'],
     extras_require=extras_require,
-    tests_require=tests_require,
     test_suite='nose.collector',
+    tests_require=['nose'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

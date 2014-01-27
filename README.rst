@@ -1,10 +1,11 @@
 pydicti
 -------
+|Build Status| |Coverage| |Version| |Downloads|
 
 Installation
 ~~~~~~~~~~~~
 
-You can install the newest version of *pydicti* from PyPI:
+You can install the newest version of *pydicti* from PyPI_:
 
 .. code:: bash
 
@@ -12,6 +13,8 @@ You can install the newest version of *pydicti* from PyPI:
 
 Alternatively, you can just take the file ``pydicti.py`` and redistribute
 it with your application.
+
+.. _PyPI: https://pypi.python.org/pypi/pydicti/
 
 
 Overview
@@ -25,7 +28,7 @@ Overview
 dicti
 =====
 
-Object of type ``dicti`` are dictionaries that feature case insensitive
+Objects of type ``dicti`` are dictionaries that feature case insensitive
 item access:
 
 .. code:: python
@@ -150,3 +153,20 @@ published by Sam Hocevar. See the COPYING file for more details.
 
 This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
+
+
+.. |Downloads| image:: https://pypip.in/d/pydicti/badge.png
+   :target: https://pypi.python.org/pypi/pydicti/
+   :alt: Downloads
+
+.. |Version| image:: https://pypip.in/v/pydicti/badge.png
+   :target: https://pypi.python.org/pypi/pydicti/
+   :alt: Latest Version
+
+.. |Build Status| image:: https://api.travis-ci.org/coldfix/pydicti.png?branch=master
+   :target: https://travis-ci.org/coldfix/pydicti
+   :alt: Build Status
+
+.. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.png?branch=master
+   :target: https://coveralls.io/r/coldfix/pydicti
+   :alt: Coverage

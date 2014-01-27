@@ -1,5 +1,6 @@
 pydicti
 -------
+|Build Status| |Version| |Downloads| |License|
 
 Installation
 ~~~~~~~~~~~~
@@ -150,3 +151,17 @@ published by Sam Hocevar. See the COPYING file for more details.
 
 This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
+
+
+.. |Downloads| image:: https://pypip.in/d/pydicti/badge.png
+   :target: https://pypi.python.org/pypi/pydicti/
+   :alt: Downloads
+
+.. |Version| image:: https://pypip.in/v/pydicti/badge.png
+   :target: https://pypi.python.org/pypi/pydicti/
+   :alt: Latest Version
+
+.. |Build Status| image:: https://api.travis-ci.org/coldfix/pydicti.png?branch=master
+   :target: https://travis-ci.org/coldfix/pydicti
+   :alt: Build Status
+

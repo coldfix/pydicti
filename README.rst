@@ -26,7 +26,7 @@ Overview
 dicti
 =====
 
-Object of type ``dicti`` are dictionaries that feature case insensitive
+Objects of type ``dicti`` are dictionaries that feature case insensitive
 item access:
 
 .. code:: python

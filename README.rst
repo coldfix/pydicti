@@ -1,11 +1,11 @@
 pydicti
 -------
-|Build Status| |Coverage| |Version| |Downloads| |License|
+|Build Status| |Coverage| |Version| |Downloads|
 
 Installation
 ~~~~~~~~~~~~
 
-You can install the newest version of *pydicti* from PyPI:
+You can install the newest version of *pydicti* from PyPI_:
 
 .. code:: bash
 
@@ -13,6 +13,8 @@ You can install the newest version of *pydicti* from PyPI:
 
 Alternatively, you can just take the file ``pydicti.py`` and redistribute
 it with your application.
+
+.. _PyPI: https://pypi.python.org/pypi/pydicti/
 
 
 Overview

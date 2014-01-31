@@ -13,7 +13,9 @@ import pydicti
 
 def c(k):
     """Capitalize or decapitalize one letter depending on its ascii value."""
-    return k.lower() if ord(k) % 2 == 0 else k.upper()
+    if isinstance(k, str):
+        return k.lower() if ord(k) % 2 == 0 else k.upper()
+    return k
 
 class TestBase(unittest.TestCase):
     base = None
@@ -21,8 +23,13 @@ class TestBase(unittest.TestCase):
 
     # utilities:
     @property
-    def items(self):
+    def simple(self):
         return list(zip("ABCDefgh", range(8)))
+
+    @property
+    def items(self):
+        special = 2, (), None, True
+        return self.simple + list(zip(special, range(len(special))))
 
     @property
     def more_items(self):
@@ -48,9 +55,9 @@ class TestBase(unittest.TestCase):
         self.checkItems(d.items(), b.items())
 
     def test_construction_from_kwargs(self):
-        kwargs = dict(self.items)
+        kwargs = dict(self.simple)
         d = self.cls(**kwargs)
-        self.assertItemsEqual(d.items(), self.items)
+        self.assertItemsEqual(d.items(), self.simple)
 
     # test basic access
     def test_setitem(self):
@@ -221,7 +228,7 @@ class TestBase(unittest.TestCase):
 
     # interoperability with JSON:
     def test_json(self):
-        d = self.cls(self.items)
+        d = self.cls(self.simple)
         l = loads(dumps(d), object_hook=self.cls)
         self.assertItemsEqual(d.items(), l.items())
 

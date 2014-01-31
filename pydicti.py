@@ -380,11 +380,3 @@ except NameError:
 else:
     odicti = build_dicti(OrderedDict)
 
-
-# Execute the doctests if run from the command line.
-# Verbose tests: python __init__.py -v
-if __name__ == "__main__":
-    import doctest
-    fail, total = doctest.testmod()
-    exit(fail)
-

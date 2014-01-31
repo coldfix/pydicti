@@ -21,7 +21,7 @@ except TypeError:
     _test_json = test.test_common.TestBase.test_json
 else:
     def _test_json(self):
-        d = self.cls(self.items)
+        d = self.cls(self.simple)
         l = loads(dumps(d), object_pairs_hook=self.cls)
         self.checkItems(d.items(), l.items())
 

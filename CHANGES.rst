@@ -6,6 +6,7 @@ CHANGELOG
 In preparation
 
 - add coverage reports
+- use more extensive unit tests
 
 
 0.0.3

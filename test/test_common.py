@@ -201,10 +201,14 @@ class TestBase(unittest.TestCase):
         d = self.cls(self.items)
         k0,v0 = self.items[0]
         d[k0] = {}
-        c = copy(d)
-        self.assertIsNot(c, d)
-        self.assertEqual(c, d)
-        self.assertIs(c[k0], d[k0])
+        c0 = copy(d)
+        self.assertIsNot(c0, d)
+        self.assertEqual(c0, d)
+        self.assertIs(c0[k0], d[k0])
+        c1 = d.copy()
+        self.assertIsNot(c1, d)
+        self.assertEqual(c1, d)
+        self.assertIs(c1[k0], d[k0])
 
     def test_deepcopy(self):
         d = self.cls(self.items)

@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+0.0.4
+=====
+In preparation
+
+- add coverage reports
+
+
 0.0.3
 =====
 Date: 26.01.2014

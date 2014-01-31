@@ -171,6 +171,17 @@ class TestBase(unittest.TestCase):
     def test_iter(self):
         d = self.cls(self.items)
         self.checkItems([(k,d[k]) for k in d], self.items)
+        self.checkItems([(k,d[k]) for k in d.iter()], self.items)
+        items = []
+        i = d.iter()
+        try:
+            while True:
+                k = next(i)
+                items.append((k, d[k]))
+        except StopIteration:
+            pass
+        finally:
+            self.checkItems(items, self.items)
 
     def test_keys(self):
         d = self.cls(self.items)

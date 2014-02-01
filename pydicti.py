@@ -156,7 +156,7 @@ extent permitted by applicable law.
 """
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
-import collections
+import sys as _sys
 from collections import MutableMapping
 from copy import deepcopy
 
@@ -333,20 +333,29 @@ def _make_dicti(dict_):
 
 
 _built_dicties = {}
-def build_dicti(base):
+def build_dicti(base, name=None, module=None):
     """
-    Create `dicti` class using `base` as the underlying dictionary.
+    Create a case insenstive subclass of `base`.
 
-    `base`  is required  to  be a  `collections.MutableMapping`. If  the
-    class has already been created, this will not create a new type, but
-    rather lookup the existing type in a table.
+    :param MutableMapping base: base class
+    :param str name: subclass name (defaults to base.__name__+'i')
+    :param str module: module name for subclass (defaults to calling module)
+
+    If  the class has already been created, this will not create a new type,
+    but rather lookup the existing type in a table. The parameters `name`
+    and `module` will only be used in this case.
 
     """
-    if base not in _built_dicties:
-        if not issubclass(base, MutableMapping):
+    try:
+        cls = _built_dicties[base]
+    except KeyError:
+        if not issubclass(base, _MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
-        _built_dicties[base] = _make_dicti(base)
-    return _built_dicties[base]
+        cls = _make_dicti(base)
+        cls.__name__ = name or base.__name__ + 'i'
+        cls.__module__ = module or _sys._getframe(1).f_globals.get('__name__', '__main__')
+        _built_dicties[base] = cls
+    return cls
 
 def Dicti(obj):
     """
@@ -378,5 +387,5 @@ try:
 except NameError:
     pass
 else:
-    odicti = build_dicti(OrderedDict)
+    odicti = build_dicti(OrderedDict, 'odicti')
 

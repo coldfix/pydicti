@@ -327,6 +327,21 @@ def _make_dicti(dict_):
             """Display string - like the underlying dictionary."""
             return '%r' % dict_(self.items())
 
+        # For now, let's assume that default pickling works fine for most
+        # base classes. However, on python3 dict needs special treatment.
+        # Its special pickling handler causes __setitem__ to be called on
+        # unpickling before __case is restored or __setstate__ is called.
+        # With the help of the __reduce__ method, this behaviour can be
+        # overwritten.
+        if dict_ is dict:
+            def __reduce__(self):
+                return Dicti, (), self.__getstate__()
+            def __getstate__(self):
+                return dict_(self)
+            def __setstate__(self, state):
+                self.__case = {}
+                self.update(state.items())
+
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""

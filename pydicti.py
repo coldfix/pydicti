@@ -157,8 +157,16 @@ extent permitted by applicable law.
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
 import sys as _sys
-from collections import MutableMapping
-from copy import deepcopy
+from collections import MutableMapping as _MutableMapping
+from copy import deepcopy as _deepcopy
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    try:
+        from ordereddict import OrderedDict
+    except ImportError:
+        pass
 
 # internally used to allow keys that are not strings
 def _lower(s):
@@ -248,10 +256,10 @@ def _make_dicti(dict_):
         # items / iteritems
 
         # Implemented by `MutableMapping`:
-        get          = MutableMapping.get
-        popitem      = MutableMapping.popitem
-        update       = MutableMapping.update
-        setdefault   = MutableMapping.setdefault
+        get          = _MutableMapping.get
+        popitem      = _MutableMapping.popitem
+        update       = _MutableMapping.update
+        setdefault   = _MutableMapping.setdefault
 
         def clear(self):
             """Remove all entries from the dictionary."""
@@ -291,7 +299,7 @@ def _make_dicti(dict_):
             """Compare values using case insensitive keys."""
             if type(other) is type(self):
                 pass
-            elif isinstance(other, MutableMapping):
+            elif isinstance(other, _MutableMapping):
                 if not hasattr(other, 'lower_dict'):
                     global Dicti
                     other = Dicti(other)
@@ -308,7 +316,7 @@ def _make_dicti(dict_):
             """Create a deep copy of the dictionary."""
             copy = self.__class__()
             for k,v in self.items():
-                copy[k] = deepcopy(v, memo)
+                copy[k] = _deepcopy(v, memo)
             return copy
 
         def __repr__(self):
@@ -375,13 +383,6 @@ def Dicti(obj):
 dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
-try:
-    from collections import OrderedDict
-except ImportError:
-    try:
-        from ordereddict import OrderedDict
-    except ImportError:
-        pass
 try:
     OrderedDict
 except NameError:

@@ -4,8 +4,9 @@ __test__ = False
 import unittest
 
 # interoperability tests:
-from copy import copy, deepcopy
-from json import loads, dumps
+import copy
+import json
+import pickle
 
 # tested module:
 import pydicti
@@ -208,7 +209,7 @@ class TestBase(unittest.TestCase):
         d = self.cls(self.items)
         k0,v0 = self.items[0]
         d[k0] = {}
-        c0 = copy(d)
+        c0 = copy.copy(d)
         self.assertIsNot(c0, d)
         self.assertEqual(c0, d)
         self.assertIs(c0[k0], d[k0])
@@ -221,15 +222,19 @@ class TestBase(unittest.TestCase):
         d = self.cls(self.items)
         k0,v0 = self.items[0]
         d[k0] = {}
-        c = deepcopy(d)
+        c = copy.deepcopy(d)
         self.assertEqual(c, d)
         self.assertIsNot(c[k0], d[k0])
         self.assertEqual(c[k0], d[k0])
 
-    # interoperability with JSON:
+    def test_pickle(self):
+        d = self.cls(self.simple)
+        l = pickle.loads(pickle.dumps(d))
+        self.assertItemsEqual(d.items(), l.items())
+
     def test_json(self):
         d = self.cls(self.simple)
-        l = loads(dumps(d), object_hook=self.cls)
+        l = json.loads(json.dumps(d), object_hook=self.cls)
         self.assertItemsEqual(d.items(), l.items())
 
     # Add non-existing assertions in python26:

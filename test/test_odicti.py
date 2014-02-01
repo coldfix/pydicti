@@ -33,9 +33,11 @@ try:
 except ImportError:
     logger.warn('Not testing collections.OrderedDict!')
 else:
+    collections_OrderedDicti = pydicti.build_dicti(
+        OrderedDict, 'collections_OrderedDicti')
     class Test_collections_OrderedDict(test.test_common.TestBase):
         base = OrderedDict
-        cls = pydicti.build_dicti(OrderedDict)
+        cls = collections_OrderedDicti
         checkItems = _checkItems
         test_json = _test_json
 
@@ -44,9 +46,11 @@ try:
 except ImportError:
     logger.warn('Not testing ordereddict.OrderedDict!')
 else:
+    ordereddict_OrderedDicti = pydicti.build_dicti(
+        OrderedDict, 'ordereddict_OrderedDicti')
     class Test_ordereddict_OrderedDict(test.test_common.TestBase):
         base = OrderedDict
-        cls = pydicti.build_dicti(OrderedDict)
+        cls = ordereddict_OrderedDicti
         checkItems = _checkItems
         test_json = _test_json
 

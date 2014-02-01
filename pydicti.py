@@ -55,7 +55,7 @@ dictionaries. It is available if either `collections.OrderedDict`_ or
 .. code:: python
 
     >>> odicti(zip('abc', range(3)))
-    Dicti(OrderedDict([('a', 0), ('b', 1), ('c', 2)]))
+    odicti([('a', 0), ('b', 1), ('c', 2)])
 
 .. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
 .. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
@@ -156,9 +156,17 @@ extent permitted by applicable law.
 """
 __all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
 
-import collections
-from collections import MutableMapping
-from copy import deepcopy
+import sys as _sys
+from collections import MutableMapping as _MutableMapping
+from copy import deepcopy as _deepcopy
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    try:
+        from ordereddict import OrderedDict
+    except ImportError:
+        pass
 
 # internally used to allow keys that are not strings
 def _lower(s):
@@ -248,10 +256,10 @@ def _make_dicti(dict_):
         # items / iteritems
 
         # Implemented by `MutableMapping`:
-        get          = MutableMapping.get
-        popitem      = MutableMapping.popitem
-        update       = MutableMapping.update
-        setdefault   = MutableMapping.setdefault
+        get          = _MutableMapping.get
+        popitem      = _MutableMapping.popitem
+        update       = _MutableMapping.update
+        setdefault   = _MutableMapping.setdefault
 
         def clear(self):
             """Remove all entries from the dictionary."""
@@ -291,7 +299,7 @@ def _make_dicti(dict_):
             """Compare values using case insensitive keys."""
             if type(other) is type(self):
                 pass
-            elif isinstance(other, MutableMapping):
+            elif isinstance(other, _MutableMapping):
                 if not hasattr(other, 'lower_dict'):
                     global Dicti
                     other = Dicti(other)
@@ -308,16 +316,31 @@ def _make_dicti(dict_):
             """Create a deep copy of the dictionary."""
             copy = self.__class__()
             for k,v in self.items():
-                copy[k] = deepcopy(v, memo)
+                copy[k] = _deepcopy(v, memo)
             return copy
 
         def __repr__(self):
-            """Representation string. Usually `dicti` or `Dicti(type)`."""
-            return '%s(%r)' % (self.__class__.__name__, dict_(self.items()))
+            """Representation string - something like `dicti([<items>])`."""
+            return '%s(%r)' % (self.__class__.__name__, list(self.items()))
 
         def __str__(self):
             """Display string - like the underlying dictionary."""
             return '%r' % dict_(self.items())
+
+        # For now, let's assume that default pickling works fine for most
+        # base classes. However, on python3 dict needs special treatment.
+        # Its special pickling handler causes __setitem__ to be called on
+        # unpickling before __case is restored or __setstate__ is called.
+        # With the help of the __reduce__ method, this behaviour can be
+        # overwritten.
+        if dict_ is dict:
+            def __reduce__(self):
+                return Dicti, (), self.__getstate__()
+            def __getstate__(self):
+                return dict_(self)
+            def __setstate__(self, state):
+                self.__case = {}
+                self.update(state.items())
 
         # extra methods:
         def lower_items(self):
@@ -333,20 +356,29 @@ def _make_dicti(dict_):
 
 
 _built_dicties = {}
-def build_dicti(base):
+def build_dicti(base, name=None, module=None):
     """
-    Create `dicti` class using `base` as the underlying dictionary.
+    Create a case insenstive subclass of `base`.
 
-    `base`  is required  to  be a  `collections.MutableMapping`. If  the
-    class has already been created, this will not create a new type, but
-    rather lookup the existing type in a table.
+    :param MutableMapping base: base class
+    :param str name: subclass name (defaults to base.__name__+'i')
+    :param str module: module name for subclass (defaults to calling module)
+
+    If  the class has already been created, this will not create a new type,
+    but rather lookup the existing type in a table. The parameters `name`
+    and `module` will not be used in this case.
 
     """
-    if base not in _built_dicties:
-        if not issubclass(base, MutableMapping):
+    try:
+        cls = _built_dicties[base]
+    except KeyError:
+        if not issubclass(base, _MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
-        _built_dicties[base] = _make_dicti(base)
-    return _built_dicties[base]
+        cls = _make_dicti(base)
+        cls.__name__ = name or base.__name__ + 'i'
+        cls.__module__ = module or _sys._getframe(1).f_globals.get('__name__', '__main__')
+        _built_dicties[base] = cls
+    return cls
 
 def Dicti(obj):
     """
@@ -367,16 +399,9 @@ dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
 try:
-    from collections import OrderedDict
-except ImportError:
-    try:
-        from ordereddict import OrderedDict
-    except ImportError:
-        pass
-try:
     OrderedDict
 except NameError:
     pass
 else:
-    odicti = build_dicti(OrderedDict)
+    odicti = build_dicti(OrderedDict, 'odicti')
 

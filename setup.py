@@ -26,7 +26,7 @@ else:
 
 setup(
     name='pydicti',
-    version='0.0.3',
+    version='0.0.4',
     description='Case insensitive derivable dictionary',
     long_description=long_description,
     author='Thomas Gläßle',
@@ -42,6 +42,10 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
         'Topic :: Software Development',
     ],
 )

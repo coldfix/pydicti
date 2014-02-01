@@ -3,10 +3,11 @@ CHANGELOG
 
 0.0.4
 =====
-In preparation
+Date 01.02.2014
 
 - add coverage reports
 - use more extensive unit tests
+- add support for pickle
 
 
 0.0.3

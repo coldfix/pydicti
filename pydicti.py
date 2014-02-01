@@ -55,7 +55,7 @@ dictionaries. It is available if either `collections.OrderedDict`_ or
 .. code:: python
 
     >>> odicti(zip('abc', range(3)))
-    Dicti(OrderedDict([('a', 0), ('b', 1), ('c', 2)]))
+    odicti([('a', 0), ('b', 1), ('c', 2)])
 
 .. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
 .. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
@@ -312,8 +312,8 @@ def _make_dicti(dict_):
             return copy
 
         def __repr__(self):
-            """Representation string. Usually `dicti` or `Dicti(type)`."""
-            return '%s(%r)' % (self.__class__.__name__, dict_(self.items()))
+            """Representation string - something like `dicti([<items>])`."""
+            return '%s(%r)' % (self.__class__.__name__, list(self.items()))
 
         def __str__(self):
             """Display string - like the underlying dictionary."""
@@ -343,7 +343,7 @@ def build_dicti(base, name=None, module=None):
 
     If  the class has already been created, this will not create a new type,
     but rather lookup the existing type in a table. The parameters `name`
-    and `module` will only be used in this case.
+    and `module` will not be used in this case.
 
     """
     try:

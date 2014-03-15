@@ -32,7 +32,7 @@ setup(
     author='Thomas Gläßle',
     author_email='t_glaessle@gmx.de',
     url='https://github.com/coldfix/pydicti',
-    license='Public Domain',
+    license='WTFPL',
     py_modules=['pydicti'],
     extras_require=extras_require,
     test_suite='nose.collector',

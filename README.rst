@@ -1,6 +1,6 @@
 pydicti
 -------
-|Build Status| |Coverage| |Version| |Downloads|
+|Build Status| |Coverage| |Version| |Downloads| |License|
 
 Installation
 ~~~~~~~~~~~~
@@ -170,3 +170,7 @@ extent permitted by applicable law.
 .. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.png?branch=master
    :target: https://coveralls.io/r/coldfix/pydicti
    :alt: Coverage
+
+.. |License| image:: https://pypip.in/license/pydicti/badge.png
+   :target: https://pypi.python.org/pypi/pydicti/
+   :alt: License

@@ -155,11 +155,11 @@ This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
 
 
-.. |Downloads| image:: https://pypip.in/d/pydicti/badge.png
+.. |Downloads| image:: http://coldfix.de:8080/d/pydicti/badge.png
    :target: https://pypi.python.org/pypi/pydicti/
    :alt: Downloads
 
-.. |Version| image:: https://pypip.in/v/pydicti/badge.png
+.. |Version| image:: http://coldfix.de:8080/v/pydicti/badge.png
    :target: https://pypi.python.org/pypi/pydicti/
    :alt: Latest Version
 
@@ -171,6 +171,6 @@ extent permitted by applicable law.
    :target: https://coveralls.io/r/coldfix/pydicti
    :alt: Coverage
 
-.. |License| image:: https://pypip.in/license/pydicti/badge.png
+.. |License| image:: http://coldfix.de:8080/license/pydicti/badge.png
    :target: https://pypi.python.org/pypi/pydicti/
    :alt: License

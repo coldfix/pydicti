@@ -155,22 +155,22 @@ This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
 
 
-.. |Downloads| image:: http://coldfix.de:8080/d/pydicti/badge.png
+.. |Downloads| image:: http://coldfix.de:8080/d/pydicti/badge.svg
    :target: https://pypi.python.org/pypi/pydicti/
    :alt: Downloads
 
-.. |Version| image:: http://coldfix.de:8080/v/pydicti/badge.png
+.. |Version| image:: http://coldfix.de:8080/v/pydicti/badge.svg
    :target: https://pypi.python.org/pypi/pydicti/
    :alt: Latest Version
 
-.. |Build Status| image:: https://api.travis-ci.org/coldfix/pydicti.png?branch=master
+.. |Build Status| image:: https://api.travis-ci.org/coldfix/pydicti.svg?branch=master
    :target: https://travis-ci.org/coldfix/pydicti
    :alt: Build Status
 
-.. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.png?branch=master
+.. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.svg?branch=master
    :target: https://coveralls.io/r/coldfix/pydicti
    :alt: Coverage
 
-.. |License| image:: http://coldfix.de:8080/license/pydicti/badge.png
-   :target: https://pypi.python.org/pypi/pydicti/
+.. |License| image:: http://coldfix.de:8080/license/pydicti/badge.svg
+   :target: https://github.com/coldfix/pydicti/blob/master/COPYING
    :alt: License

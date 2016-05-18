@@ -1,9 +1,17 @@
 CHANGELOG
 ~~~~~~~~~
 
+0.0.5
+=====
+Date: 18.05.2016
+
+- fix pickling on py 3.5
+- the 'name' parameter to build_dicti can now be a qualname
+
+
 0.0.4
 =====
-Date 01.02.2014
+Date: 01.02.2014
 
 - add coverage reports
 - use more extensive unit tests

@@ -375,8 +375,10 @@ def build_dicti(base, name=None, module=None):
         if not issubclass(base, _MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
         cls = _make_dicti(base)
-        cls.__name__ = name or base.__name__ + 'i'
+        name = name or base.__name__ + 'i'
+        cls.__name__ = name.rsplit('.', 1)[-1]
         cls.__module__ = module or _sys._getframe(1).f_globals.get('__name__', '__main__')
+        cls.__qualname__ = name
         _built_dicties[base] = cls
     return cls
 

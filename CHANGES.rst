@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+0.0.6
+=====
+Date: 08.09.2016
+
+- fix UnicodeDecodeError in setup when UTF-8 is not the default encoding
+
+
 0.0.5
 =====
 Date: 18.05.2016

@@ -34,7 +34,7 @@ else:
 
 setup(
     name='pydicti',
-    version='0.0.5',
+    version='0.0.6',
     description='Case insensitive derivable dictionary',
     long_description=long_description,
     author='Thomas Gläßle',

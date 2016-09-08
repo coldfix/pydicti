@@ -1,5 +1,6 @@
 # encoding: utf-8
 from setuptools import setup
+from distutils.util import convert_path
 
 # see: http://bugs.python.org/issue15881#msg170215
 try:
@@ -7,11 +8,18 @@ try:
 except ImportError:
     pass
 
+
+def read_file(path):
+    """Read a file in binary mode."""
+    with open(convert_path(path), 'rb') as f:
+        return f.read()
+
+
 # prepare long_description for PyPI:
 long_description = None
 try:
-    long_description = open('README.rst').read()
-    long_description += '\n' + open('CHANGES.rst').read()
+    long_description = read_file('README.rst').decode('utf-8')
+    long_description += '\n' + read_file('CHANGES.rst').decode('utf-8')
 except IOError:
     pass
 

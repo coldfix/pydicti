@@ -1,6 +1,6 @@
 pydicti
 -------
-|Build Status| |Coverage| |Version| |Downloads| |License|
+|Tests| |Coverage| |Version| |License|
 
 Installation
 ~~~~~~~~~~~~
@@ -155,22 +155,20 @@ This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
 
 
-.. |Downloads| image:: http://coldfix.de:8080/d/pydicti/badge.svg
-   :target: https://pypi.python.org/pypi/pydicti/
-   :alt: Downloads
+.. Badges:
 
-.. |Version| image:: http://coldfix.de:8080/v/pydicti/badge.svg
-   :target: https://pypi.python.org/pypi/pydicti/
-   :alt: Latest Version
+.. |Version| image::    https://img.shields.io/pypi/v/pydicti.svg
+   :target:             https://pypi.python.org/pypi/pydicti
+   :alt:                Latest Version
 
-.. |Build Status| image:: https://api.travis-ci.org/coldfix/pydicti.svg?branch=master
-   :target: https://travis-ci.org/coldfix/pydicti
-   :alt: Build Status
+.. |Tests| image::      https://api.travis-ci.org/coldfix/pydicti.svg?branch=master
+   :target:             https://travis-ci.org/coldfix/pydicti
+   :alt:                Test Status
 
-.. |Coverage| image:: https://coveralls.io/repos/coldfix/pydicti/badge.svg?branch=master
-   :target: https://coveralls.io/r/coldfix/pydicti
-   :alt: Coverage
+.. |Coverage| image::   https://coveralls.io/repos/coldfix/pydicti/badge.svg?branch=master
+   :target:             https://coveralls.io/r/coldfix/pydicti
+   :alt:                Coverage
 
-.. |License| image:: http://coldfix.de:8080/license/pydicti/badge.svg
-   :target: https://github.com/coldfix/pydicti/blob/master/COPYING
-   :alt: License
+.. |License| image::    https://img.shields.io/pypi/l/pydicti.svg
+   :target:             https://github.com/coldfix/pydicti/blob/master/COPYING
+   :alt:                License

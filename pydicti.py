@@ -42,6 +42,7 @@ def _lower(s):
 # make class
 def _make_dicti(dict_):
     _marker = []
+
     class Dicti(dict_):
         """
         Dictionary with case insensitive lookups.
@@ -92,8 +93,8 @@ def _make_dicti(dict_):
             >>> odicti(zip('abc', range(3)))
             odicti({'a': 0, 'b': 1, 'c': 2})
 
-        .. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
-        .. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
+        .. _collections.OrderedDict: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
+        .. _ordereddict.OrderedDict: https://pypi.python.org/pypi/ordereddict
 
 
         Implementation rationale and known pitfalls
@@ -119,8 +120,9 @@ def _make_dicti(dict_):
         # Constructor:
         def __init__(self, *args, **kwargs):
             """Initialize a case insensitive dictionary from the arguments."""
-            self.__case = {}        # create this member ASAP since
-                                    # dict_.__init__() might call self.clear()
+            # We have to setup `self.__case` at the very first, because
+            # dict_.__init__() might call self.clear():
+            self.__case = {}
             dict_.__init__(self)
             self.update(*args, **kwargs)
 
@@ -158,10 +160,10 @@ def _make_dicti(dict_):
         # items / iteritems
 
         # Implemented by `MutableMapping`:
-        get          = _MutableMapping.get
-        popitem      = _MutableMapping.popitem
-        update       = _MutableMapping.update
-        setdefault   = _MutableMapping.setdefault
+        get        = _MutableMapping.get
+        popitem    = _MutableMapping.popitem
+        update     = _MutableMapping.update
+        setdefault = _MutableMapping.setdefault
 
         def clear(self):
             """Remove all entries from the dictionary."""
@@ -217,7 +219,7 @@ def _make_dicti(dict_):
         def __deepcopy__(self, memo):
             """Create a deep copy of the dictionary."""
             copy = self.__class__()
-            for k,v in self.items():
+            for k, v in self.items():
                 copy[k] = _deepcopy(v, memo)
             return copy
 
@@ -240,8 +242,10 @@ def _make_dicti(dict_):
         if dict_ is dict:
             def __reduce__(self):
                 return Dicti, (), self.__getstate__()
+
             def __getstate__(self):
                 return dict_(self)
+
             def __setstate__(self, state):
                 self.__case = {}
                 self.update(state.items())
@@ -249,7 +253,7 @@ def _make_dicti(dict_):
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
-            return ((_lower(k), v) for k,v in self.items())
+            return ((_lower(k), v) for k, v in self.items())
 
         def lower_dict(self):
             """Return an underlying dictionary type with lowercase keys."""
@@ -260,6 +264,7 @@ def _make_dicti(dict_):
 
 
 _built_dicties = {}
+
 
 def build_dicti(base, name=None, module=None):
     """
@@ -295,7 +300,8 @@ def build_dicti(base, name=None, module=None):
         cls = _make_dicti(base)
         name = name or base.__name__ + 'i'
         cls.__name__ = name.rsplit('.', 1)[-1]
-        cls.__module__ = module or _sys._getframe(1).f_globals.get('__name__', '__main__')
+        cls.__module__ = module or _sys._getframe(1).f_globals.get(
+            '__name__', '__main__')
         cls.__qualname__ = name
         _built_dicties[base] = cls
     return cls

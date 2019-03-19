@@ -55,7 +55,7 @@ dictionaries. It is available if either `collections.OrderedDict`_ or
 .. code:: python
 
     >>> odicti(zip('abc', range(3)))
-    odicti([('a', 0), ('b', 1), ('c', 2)])
+    odicti({'a': 0, 'b': 1, 'c': 2})
 
 .. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
 .. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
@@ -321,11 +321,13 @@ def _make_dicti(dict_):
 
         def __repr__(self):
             """Representation string - something like `dicti([<items>])`."""
-            return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+            return '%s(%s)' % (self.__class__.__name__, self)
 
         def __str__(self):
             """Display string - like the underlying dictionary."""
-            return '%r' % dict_(self.items())
+            return '{%s}' % ', '.join([
+                '%r: %r' % (k, v) for k, v in self.items()
+            ])
 
         # For now, let's assume that default pickling works fine for most
         # base classes. However, on python3 dict needs special treatment.

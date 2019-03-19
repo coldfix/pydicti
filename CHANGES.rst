@@ -1,6 +1,14 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.0
+=====
+Date: 19.03.2019
+
+- drop py2.6 support
+- fix version number in long_description
+
+
 1.0.0
 =====
 Date: 19.03.2019

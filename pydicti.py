@@ -152,9 +152,14 @@ published by Sam Hocevar. See the COPYING file for more details.
 
 This program  is free software.  It comes  without any warranty,  to the
 extent permitted by applicable law.
-
 """
-__all__ = ['build_dicti', 'Dicti', 'odicti', 'dicti']
+
+__all__ = [
+    'dicti',
+    'odicti',
+    'Dicti',
+    'build_dicti',
+]
 
 import sys as _sys
 from collections import MutableMapping as _MutableMapping
@@ -168,6 +173,7 @@ except ImportError:
     except ImportError:
         pass
 
+
 # internally used to allow keys that are not strings
 def _lower(s):
     """Convert to lower case if possible."""
@@ -175,6 +181,7 @@ def _lower(s):
         return s.lower()
     except AttributeError:
         return s
+
 
 # make class
 def _make_dicti(dict_):
@@ -358,6 +365,7 @@ def _make_dicti(dict_):
 
 
 _built_dicties = {}
+
 def build_dicti(base, name=None, module=None):
     """
     Create a case insenstive subclass of `base`.
@@ -369,7 +377,6 @@ def build_dicti(base, name=None, module=None):
     If  the class has already been created, this will not create a new type,
     but rather lookup the existing type in a table. The parameters `name`
     and `module` will not be used in this case.
-
     """
     try:
         cls = _built_dicties[base]
@@ -384,6 +391,7 @@ def build_dicti(base, name=None, module=None):
         _built_dicties[base] = cls
     return cls
 
+
 def Dicti(obj):
     """
     Create case insensitive dictionary object from existing dictionary.
@@ -394,12 +402,13 @@ def Dicti(obj):
     Since  this method  has the  same  name as  was used  to create  the
     class within  `build_dicti` this  allows `repr()`-esentations  to be
     invertible without further work.
-
     """
     return build_dicti(type(obj))(obj)
 
+
 # `dicti` is the default case insensitive dictionary
 dicti = build_dicti(dict)
+
 
 # `odicti` is an ordered, case insensitive dictionary type
 try:
@@ -408,4 +417,3 @@ except NameError:
     pass
 else:
     odicti = build_dicti(OrderedDict, 'odicti')
-

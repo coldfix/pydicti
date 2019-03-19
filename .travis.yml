@@ -10,9 +10,10 @@ python:
   - "pypy"
 
 install:
-  - pip install coveralls nose
+  - pip install coveralls nose pyflakes
 
 script:
+  - pyflakes pydicti.py
   - coverage run --source=pydicti setup.py nosetests
 
 after_success:

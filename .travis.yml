@@ -3,7 +3,7 @@ python:
 # - "2.6"   # no longer supported by coveralls
   - "2.7"
 # - "3.2"   # no longer supported by coverage
-  - "3.3"
+# - "3.3"   # no longer well supported by pyflakes
   - "3.4"
   - "3.5"
   - "3.6"

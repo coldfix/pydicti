@@ -1,6 +1,14 @@
 CHANGELOG
 ~~~~~~~~~
 
+0.0.7
+=====
+Date: 19.03.2019
+
+- make str representation more dict-like
+- misc cleanup
+
+
 0.0.6
 =====
 Date: 08.09.2016

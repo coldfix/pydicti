@@ -332,8 +332,6 @@ dicti = build_dicti(dict)
 
 # `odicti` is an ordered, case insensitive dictionary type
 try:
-    OrderedDict
+    odicti = build_dicti(OrderedDict, 'odicti')
 except NameError:
     pass
-else:
-    odicti = build_dicti(OrderedDict, 'odicti')

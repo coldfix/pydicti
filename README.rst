@@ -50,16 +50,13 @@ odicti
 ======
 
 The type ``odicti`` instanciates order-preserving case insensitive
-dictionaries. It is available if either `collections.OrderedDict`_ or
-`ordereddict.OrderedDict`_ exists:
+dictionaries:
 
 .. code:: python
 
     >>> odicti(zip('abc', range(3)))
     Dicti(OrderedDict([('a', 0), ('b', 1), ('c', 2)]))
 
-.. _`collections.OrderedDict`: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
-.. _`ordereddict.OrderedDict`: https://pypi.python.org/pypi/ordereddict/1.1
 
 build_dicti
 ===========
@@ -113,7 +110,7 @@ module:
 
 .. _json: http://docs.python.org/3.3/library/json.html
 
-Above python26 you can use ``json.loads(s, object_pairs_hook=odicti)`` to
+You can use ``json.loads(s, object_pairs_hook=odicti)`` to
 deserialize ordered dictionaries.
 
 

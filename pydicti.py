@@ -20,14 +20,7 @@ __all__ = [
 import sys as _sys
 from collections import MutableMapping as _MutableMapping
 from copy import deepcopy as _deepcopy
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    try:
-        from ordereddict import OrderedDict
-    except ImportError:
-        pass
+from collections import OrderedDict
 
 
 # internally used to allow keys that are not strings
@@ -70,8 +63,8 @@ def _make_dicti(dict_):
             >>> d == json.loads(json.dumps(d), object_hook=dicti)
             True
 
-        Above python26 you can use ``json.loads(s, object_pairs_hook=odicti)``
-        to deserialize ordered dictionaries.
+        You can use ``json.loads(s, object_pairs_hook=odicti)`` to
+        deserialize ordered dictionaries.
 
         Note  that `dicti`  is  inherited  from `builtins.dict`  instead
         of   from   `collections.MutableMapping`.    This   means   that
@@ -85,16 +78,10 @@ def _make_dicti(dict_):
         ====================
 
         The type ``odicti`` instanciates order-preserving case insensitive
-        dictionaries. It is available if either `collections.OrderedDict`_
-        or `ordereddict.OrderedDict`_ exists:
-
-        .. code:: python
+        dictionaries::
 
             >>> odicti(zip('abc', range(3)))
             odicti({'a': 0, 'b': 1, 'c': 2})
-
-        .. _collections.OrderedDict: http://docs.python.org/3.3/library/collections.html#collections.OrderedDict
-        .. _ordereddict.OrderedDict: https://pypi.python.org/pypi/ordereddict
 
 
         Implementation rationale and known pitfalls
@@ -326,12 +313,5 @@ def Dicti(obj):
     return build_dicti(type(obj))(obj)
 
 
-# `dicti` is the default case insensitive dictionary
 dicti = build_dicti(dict)
-
-
-# `odicti` is an ordered, case insensitive dictionary type
-try:
-    odicti = build_dicti(OrderedDict, 'odicti')
-except NameError:
-    pass
+odicti = build_dicti(OrderedDict, 'odicti')

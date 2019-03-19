@@ -10,7 +10,7 @@ python:
   - "pypy"
 
 install:
-  - pip install coveralls nose ordereddict
+  - pip install coveralls nose
 
 script:
   - coverage run --source=pydicti setup.py nosetests

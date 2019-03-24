@@ -18,7 +18,10 @@ __all__ = [
 ]
 
 import sys as _sys
-from collections import MutableMapping as _MutableMapping
+try:
+    from collections.abc import MutableMapping as _MutableMapping
+except ImportError:
+    from collections import MutableMapping as _MutableMapping
 from copy import deepcopy as _deepcopy
 from collections import OrderedDict
 

@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.1
+=====
+Date: 25.03.2019
+
+- fix deprecated MutableMapping import (error on py38)
+
+
 1.1.0
 =====
 Date: 19.03.2019

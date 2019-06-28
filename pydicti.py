@@ -125,12 +125,13 @@ def _make_dicti(dict_):
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
+            lower = _lower(key)
             # NOTE: this must be executed BEFORE dict_.__setitem__ in order
             # to leave a consistent state for base method:
-            if key in self:
-                key = self.__case[_lower(key)]
+            if lower in self.__case:
+                key = self.__case[lower]
             dict_.__setitem__(self, key, value)
-            self.__case[_lower(key)] = key
+            self.__case[lower] = key
 
         def __delitem__(self, key):
             """Delete the item for `key` case insensitively."""

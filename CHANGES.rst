@@ -1,6 +1,14 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.2
+=====
+Date: 28.06.2019
+
+- leave item order invariant under assignment in odicti (#2)
+- leave key case invariant under assignment
+
+
 1.1.1
 =====
 Date: 25.03.2019

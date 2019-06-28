@@ -61,12 +61,17 @@ class TestBase(unittest.TestCase):
         self.assertItemsEqual(d.items(), self.simple)
 
     # test basic access
-    def test_setitem(self):
-        d = self.cls((c(k),0) for k,v in self.items)
-        for k,v in self.items:
-            d[k] = v
+    def test_setitem_keeps_original_case(self):
+        d = self.cls((k, 0) for k,v in self.items)
+        for k, v in self.items:
+            d[c(k)] = v
         self.checkItems(d.items(), self.items)
-        for k,v in self.more_items:
+
+    def test_setitem_keeps_order(self):
+        d = self.cls((k, 0) for k,v in self.items)
+        for k, v in reversed(self.items):
+            d[k] = v
+        for k, v in self.more_items:
             d[k] = v
         self.checkItems(d.items(), self.items + self.more_items)
 

@@ -126,7 +126,7 @@ def _make_dicti(dict_):
             # NOTE: this must be executed BEFORE dict_.__setitem__ in order
             # to leave a consistent state for base method:
             if key in self:
-                del self[key]
+                key = self.__case[_lower(key)]
             dict_.__setitem__(self, key, value)
             self.__case[_lower(key)] = key
 

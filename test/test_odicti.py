@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 try:
     loads('{}', object_pairs_hook=dict)
 except TypeError:
-    logger.warn('Not testing object_pairs_hook!')
+    logger.warning('Not testing object_pairs_hook!')
     _test_json = test.test_common.TestBase.test_json
 else:
     def _test_json(self):
@@ -31,7 +31,7 @@ def _checkItems(self, a, b):
 try:
     from collections import OrderedDict
 except ImportError:
-    logger.warn('Not testing collections.OrderedDict!')
+    logger.warning('Not testing collections.OrderedDict!')
 else:
     collections_OrderedDicti = pydicti.build_dicti(
         OrderedDict, 'collections_OrderedDicti')
@@ -44,7 +44,7 @@ else:
 try:
     from ordereddict import OrderedDict
 except ImportError:
-    logger.warn('Not testing ordereddict.OrderedDict!')
+    logger.warning('Not testing ordereddict.OrderedDict!')
 else:
     ordereddict_OrderedDicti = pydicti.build_dicti(
         OrderedDict, 'ordereddict_OrderedDicti')

@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.3
+=====
+Date: 28.06.2019
+
+- avoid key recomputation in ``__setitem__``
+
+
 1.1.2
 =====
 Date: 28.06.2019

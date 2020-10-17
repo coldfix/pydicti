@@ -28,7 +28,7 @@ from copy import deepcopy as _deepcopy
 from collections import OrderedDict
 
 
-def _lower(s):
+def normalize_case(s):
     """
     Convert to lower case if possible.
 
@@ -45,7 +45,7 @@ def _lower(s):
 
 
 # make class
-def _make_dicti(dict_):
+def _make_dicti(dict_, normalize=normalize_case):
     _marker = []
 
     class Dicti(dict_):
@@ -128,11 +128,11 @@ def _make_dicti(dict_):
         # MutableMapping methods:
         def __getitem__(self, key):
             """Get the value for `key` case insensitively."""
-            return dict_.__getitem__(self, self.__case[_lower(key)])
+            return dict_.__getitem__(self, self.__case[normalize(key)])
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
-            lower = _lower(key)
+            lower = normalize(key)
             # NOTE: this must be executed BEFORE dict_.__setitem__ in order
             # to leave a consistent state for base method:
             if lower in self.__case:
@@ -142,7 +142,7 @@ def _make_dicti(dict_):
 
         def __delitem__(self, key):
             """Delete the item for `key` case insensitively."""
-            lower = _lower(key)
+            lower = normalize(key)
             dict_.__delitem__(self, self.__case[lower])
             # NOTE: this must be executed AFTER dict_.__delitem__ in order
             # to leave a consistent state for base method:
@@ -150,7 +150,7 @@ def _make_dicti(dict_):
 
         def __contains__(self, key):
             """Check if key is contained."""
-            return _lower(key) in self.__case
+            return normalize(key) in self.__case
 
         # Implemented by `dict_`
         # __iter__  # iterate in original case
@@ -253,7 +253,7 @@ def _make_dicti(dict_):
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
-            return ((_lower(k), v) for k, v in self.items())
+            return ((normalize(k), v) for k, v in self.items())
 
         def lower_dict(self):
             """Return an underlying dictionary type with lowercase keys."""
@@ -266,13 +266,15 @@ def _make_dicti(dict_):
 _built_dicties = {}
 
 
-def build_dicti(base, name=None, module=None):
+def build_dicti(base, name=None, module=None, normalize=normalize_case):
     """
     Create a case insenstive subclass of `base`.
 
     :param MutableMapping base: base class
     :param str name: subclass name (defaults to base.__name__+'i')
     :param str module: module name for subclass (defaults to calling module)
+    :param callable normalize: normalization function that decides which keys
+                               map to the same values
 
     If  the class has already been created, this will not create a new type,
     but rather lookup the existing type in a table. The parameters `name`
@@ -293,17 +295,17 @@ def build_dicti(base, name=None, module=None):
         True
     """
     try:
-        cls = _built_dicties[base]
+        cls = _built_dicties[base, normalize]
     except KeyError:
         if not issubclass(base, _MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
-        cls = _make_dicti(base)
+        cls = _make_dicti(base, normalize)
         name = name or base.__name__ + 'i'
         cls.__name__ = name.rsplit('.', 1)[-1]
         cls.__module__ = module or _sys._getframe(1).f_globals.get(
             '__name__', '__main__')
         cls.__qualname__ = name
-        _built_dicties[base] = cls
+        _built_dicties[base, normalize] = cls
     return cls
 
 

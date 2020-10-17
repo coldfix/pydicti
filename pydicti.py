@@ -45,7 +45,7 @@ def _lower(s):
 
 
 # make class
-def _make_dicti(dict_):
+def _make_dicti(dict_, _lower=_lower):
     _marker = []
 
     class Dicti(dict_):
@@ -266,13 +266,15 @@ def _make_dicti(dict_):
 _built_dicties = {}
 
 
-def build_dicti(base, name=None, module=None):
+def build_dicti(base, name=None, module=None, normalize=_lower):
     """
     Create a case insenstive subclass of `base`.
 
     :param MutableMapping base: base class
     :param str name: subclass name (defaults to base.__name__+'i')
     :param str module: module name for subclass (defaults to calling module)
+    :param callable normalize: normalization function that decides which keys
+                               map to the same values
 
     If  the class has already been created, this will not create a new type,
     but rather lookup the existing type in a table. The parameters `name`
@@ -293,17 +295,17 @@ def build_dicti(base, name=None, module=None):
         True
     """
     try:
-        cls = _built_dicties[base]
+        cls = _built_dicties[base, normalize]
     except KeyError:
         if not issubclass(base, _MutableMapping):
             raise TypeError("Not a mapping type: %s" % base)
-        cls = _make_dicti(base)
+        cls = _make_dicti(base, normalize)
         name = name or base.__name__ + 'i'
         cls.__name__ = name.rsplit('.', 1)[-1]
         cls.__module__ = module or _sys._getframe(1).f_globals.get(
             '__name__', '__main__')
         cls.__qualname__ = name
-        _built_dicties[base] = cls
+        _built_dicties[base, normalize] = cls
     return cls
 
 

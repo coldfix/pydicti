@@ -28,13 +28,20 @@ from copy import deepcopy as _deepcopy
 from collections import OrderedDict
 
 
-# internally used to allow keys that are not strings
 def _lower(s):
-    """Convert to lower case if possible."""
+    """
+    Convert to lower case if possible.
+
+    Used internally to allow keys that are not strings.
+    Will use casefold if available (Python >= 3.3).
+    """
     try:
-        return s.lower()
+        return s.casefold()
     except AttributeError:
-        return s
+        try:
+            return s.lower()
+        except AttributeError:
+            return s
 
 
 # make class

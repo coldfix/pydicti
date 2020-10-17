@@ -28,7 +28,7 @@ from copy import deepcopy as _deepcopy
 from collections import OrderedDict
 
 
-def _lower(s):
+def normalize_case(s):
     """
     Convert to lower case if possible.
 
@@ -45,7 +45,7 @@ def _lower(s):
 
 
 # make class
-def _make_dicti(dict_, _lower=_lower):
+def _make_dicti(dict_, normalize=normalize_case):
     _marker = []
 
     class Dicti(dict_):
@@ -128,11 +128,11 @@ def _make_dicti(dict_, _lower=_lower):
         # MutableMapping methods:
         def __getitem__(self, key):
             """Get the value for `key` case insensitively."""
-            return dict_.__getitem__(self, self.__case[_lower(key)])
+            return dict_.__getitem__(self, self.__case[normalize(key)])
 
         def __setitem__(self, key, value):
             """Set the value for `key` and assume new case."""
-            lower = _lower(key)
+            lower = normalize(key)
             # NOTE: this must be executed BEFORE dict_.__setitem__ in order
             # to leave a consistent state for base method:
             if lower in self.__case:
@@ -142,7 +142,7 @@ def _make_dicti(dict_, _lower=_lower):
 
         def __delitem__(self, key):
             """Delete the item for `key` case insensitively."""
-            lower = _lower(key)
+            lower = normalize(key)
             dict_.__delitem__(self, self.__case[lower])
             # NOTE: this must be executed AFTER dict_.__delitem__ in order
             # to leave a consistent state for base method:
@@ -150,7 +150,7 @@ def _make_dicti(dict_, _lower=_lower):
 
         def __contains__(self, key):
             """Check if key is contained."""
-            return _lower(key) in self.__case
+            return normalize(key) in self.__case
 
         # Implemented by `dict_`
         # __iter__  # iterate in original case
@@ -253,7 +253,7 @@ def _make_dicti(dict_, _lower=_lower):
         # extra methods:
         def lower_items(self):
             """Iterate over (key,value) pairs with lowercase keys."""
-            return ((_lower(k), v) for k, v in self.items())
+            return ((normalize(k), v) for k, v in self.items())
 
         def lower_dict(self):
             """Return an underlying dictionary type with lowercase keys."""
@@ -266,7 +266,7 @@ def _make_dicti(dict_, _lower=_lower):
 _built_dicties = {}
 
 
-def build_dicti(base, name=None, module=None, normalize=_lower):
+def build_dicti(base, name=None, module=None, normalize=normalize_case):
     """
     Create a case insenstive subclass of `base`.
 

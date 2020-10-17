@@ -1,6 +1,15 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.4
+=====
+Date: 17.10.2020
+
+- use ``str.casefold()`` on python3
+- make normalization function a parameter of ``build_dict``, so that
+  user-defined normalization functions can be passed
+
+
 1.1.3
 =====
 Date: 28.06.2019

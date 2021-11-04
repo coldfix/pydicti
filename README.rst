@@ -162,8 +162,8 @@ extent permitted by applicable law.
    :target:             https://travis-ci.org/coldfix/pydicti
    :alt:                Test Status
 
-.. |Coverage| image::   https://coveralls.io/repos/coldfix/pydicti/badge.svg?branch=master
-   :target:             https://coveralls.io/r/coldfix/pydicti
+.. |Coverage| image::   https://codecov.io/gh/coldfix/pydicti/branch/master/graph/badge.svg?token=7FEGhE9UVI
+   :target:             https://codecov.io/gh/coldfix/pydicti
    :alt:                Coverage
 
 .. |License| image::    https://img.shields.io/pypi/l/pydicti.svg

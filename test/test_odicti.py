@@ -22,11 +22,13 @@ except TypeError:
 else:
     def _test_json(self):
         d = self.cls(self.simple)
-        l = loads(dumps(d), object_pairs_hook=self.cls)
-        self.checkItems(d.items(), l.items())
+        e = loads(dumps(d), object_pairs_hook=self.cls)
+        self.checkItems(d.items(), e.items())
+
 
 def _checkItems(self, a, b):
     unittest.TestCase.assertEqual(self, list(a), list(b))
+
 
 try:
     from collections import OrderedDict
@@ -35,6 +37,7 @@ except ImportError:
 else:
     collections_OrderedDicti = pydicti.build_dicti(
         OrderedDict, 'collections_OrderedDicti')
+
     class Test_collections_OrderedDict(test.test_common.TestBase):
         base = OrderedDict
         cls = collections_OrderedDicti
@@ -48,6 +51,7 @@ except ImportError:
 else:
     ordereddict_OrderedDicti = pydicti.build_dicti(
         OrderedDict, 'ordereddict_OrderedDicti')
+
     class Test_ordereddict_OrderedDict(test.test_common.TestBase):
         base = OrderedDict
         cls = ordereddict_OrderedDicti

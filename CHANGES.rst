@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.6
+=====
+Date: 04.11.2021
+
+- update the badges on the landing page
+
+
 1.1.5
 =====
 Date: 04.11.2021

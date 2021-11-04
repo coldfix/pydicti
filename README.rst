@@ -158,8 +158,8 @@ extent permitted by applicable law.
    :target:             https://pypi.python.org/pypi/pydicti
    :alt:                Latest Version
 
-.. |Tests| image::      https://api.travis-ci.org/coldfix/pydicti.svg?branch=master
-   :target:             https://travis-ci.org/coldfix/pydicti
+.. |Tests| image::      https://github.com/coldfix/pydicti/workflows/Tests/badge.svg
+   :target:             https://github.com/coldfix/pydicti/actions?query=Tests
    :alt:                Test Status
 
 .. |Coverage| image::   https://codecov.io/gh/coldfix/pydicti/branch/master/graph/badge.svg?token=7FEGhE9UVI

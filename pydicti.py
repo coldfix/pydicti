@@ -10,7 +10,7 @@ Contents:
 - def ``Dicti``: create a case insensitive copy of a given dictionary
 """
 
-__version__ = '1.1.4'
+__version__ = '1.1.5'
 
 __all__ = [
     'dicti',

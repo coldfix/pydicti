@@ -1,6 +1,13 @@
 CHANGELOG
 ~~~~~~~~~
 
+1.1.5
+=====
+Date: 04.11.2021
+
+- maintenance release for testing automatic releases using GitHub Actions
+
+
 1.1.4
 =====
 Date: 17.10.2020

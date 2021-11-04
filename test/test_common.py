@@ -18,6 +18,7 @@ def c(k):
         return k.lower() if ord(k) % 2 == 0 else k.upper()
     return k
 
+
 class TestBase(unittest.TestCase):
     base = None
     cls = None
@@ -47,7 +48,7 @@ class TestBase(unittest.TestCase):
 
     # test the constructor:
     def test_construction_from_iterable(self):
-        d = self.cls((k,v) for k,v in self.items)
+        d = self.cls((k, v) for k, v in self.items)
         self.checkItems(d.items(), self.items)
 
     def test_construction_from_base(self):
@@ -62,13 +63,13 @@ class TestBase(unittest.TestCase):
 
     # test basic access
     def test_setitem_keeps_original_case(self):
-        d = self.cls((k, 0) for k,v in self.items)
+        d = self.cls((k, 0) for k, v in self.items)
         for k, v in self.items:
             d[c(k)] = v
         self.checkItems(d.items(), self.items)
 
     def test_setitem_keeps_order(self):
-        d = self.cls((k, 0) for k,v in self.items)
+        d = self.cls((k, 0) for k, v in self.items)
         for k, v in reversed(self.items):
             d[k] = v
         for k, v in self.more_items:
@@ -77,37 +78,37 @@ class TestBase(unittest.TestCase):
 
     def test_getitem(self):
         d = self.cls(self.items)
-        self.checkItems([(k,d[c(k)]) for k,v in self.items], self.items)
+        self.checkItems([(k, d[c(k)]) for k, v in self.items], self.items)
         def getitem(d, k):
             return d[c(k)]
-        for k,v in self.more_items:
+        for k, v in self.more_items:
             self.assertRaises(KeyError, getitem, d, k)
 
     def test_get(self):
         d = self.cls(self.items)
-        self.checkItems([(k,d.get(c(k))) for k,v in self.items], self.items)
-        for k,v in self.more_items:
+        self.checkItems([(k, d.get(c(k))) for k, v in self.items], self.items)
+        for k, v in self.more_items:
             self.assertIs(d.get(k), None)
-        for k,v in self.more_items:
+        for k, v in self.more_items:
             self.assertEqual(d.get(k, v), v)
 
     def test_delitem(self):
         p = self.items
         d = self.cls(p)
         while p:
-            k,v = p.pop()
+            k, v = p.pop()
             del d[c(k)]
             self.checkItems(d.items(), p)
         def delitem(d, k):
             del d[c(k)]
-        for k,v in self.items + self.more_items:
+        for k, v in self.items + self.more_items:
             self.assertRaises(KeyError, delitem, d, k)
 
     def test_contains(self):
         d = self.cls(self.items)
-        for k,v in self.items:
+        for k, v in self.items:
             self.assertTrue(c(k) in d)
-        for k,v in self.more_items:
+        for k, v in self.more_items:
             self.assertFalse(k in d)
 
     def test_clear(self):
@@ -121,25 +122,25 @@ class TestBase(unittest.TestCase):
         p = self.items
         d = self.cls(p)
         while p:
-            k,v = p.pop()
+            k, v = p.pop()
             v2 = d.pop(c(k))
             self.assertEqual(v2, v)
         def popitem(d, k, *a):
             return d.pop(c(k), *a)
-        for k,v in self.items:
+        for k, v in self.items:
             self.assertRaises(KeyError, popitem, d, k)
-        for k,v in self.items:
+        for k, v in self.items:
             self.assertEqual(d.pop(c(k), v), v)
 
     def test_update(self):
-        d = self.cls((k,v-1) for k,v in self.items)
+        d = self.cls((k, v - 1) for k, v in self.items)
         d.update(self.base())
 
     def test_setdefault(self):
         d = self.cls(self.items)
-        for k,v in self.items:
-            d.setdefault(c(k), v+1)
-        for k,v in self.more_items:
+        for k, v in self.items:
+            d.setdefault(c(k), v + 1)
+        for k, v in self.more_items:
             d.setdefault(k, v)
         self.checkItems(d.items(), self.items + self.more_items)
 
@@ -149,7 +150,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(d, self.cls(self.items))
         self.assertEqual(d, self.base(self.items))
 
-        k0,v0 = self.items[0]
+        k0, v0 = self.items[0]
 
         d0 = self.cls()
         self.assertNotEqual(d, d0)
@@ -183,8 +184,8 @@ class TestBase(unittest.TestCase):
     # test iteration
     def test_iter(self):
         d = self.cls(self.items)
-        self.checkItems([(k,d[k]) for k in d], self.items)
-        self.checkItems([(k,d[k]) for k in d.iter()], self.items)
+        self.checkItems([(k, d[k]) for k in d], self.items)
+        self.checkItems([(k, d[k]) for k in d.iter()], self.items)
         items = []
         i = d.iter()
         try:
@@ -198,11 +199,11 @@ class TestBase(unittest.TestCase):
 
     def test_keys(self):
         d = self.cls(self.items)
-        self.checkItems(d.keys(), [k for k,v in self.items])
+        self.checkItems(d.keys(), [k for k, v in self.items])
 
     def test_values(self):
         d = self.cls(self.items)
-        self.checkItems(d.values(), [v for k,v in self.items])
+        self.checkItems(d.values(), [v for k, v in self.items])
 
     def test_cast_to_base(self):
         d = self.cls(self.items)
@@ -212,7 +213,7 @@ class TestBase(unittest.TestCase):
     # copying, serialization, etc
     def test_copy(self):
         d = self.cls(self.items)
-        k0,v0 = self.items[0]
+        k0, v0 = self.items[0]
         d[k0] = {}
         c0 = copy.copy(d)
         self.assertIsNot(c0, d)
@@ -225,7 +226,7 @@ class TestBase(unittest.TestCase):
 
     def test_deepcopy(self):
         d = self.cls(self.items)
-        k0,v0 = self.items[0]
+        k0, v0 = self.items[0]
         d[k0] = {}
         c = copy.deepcopy(d)
         self.assertEqual(c, d)
@@ -234,13 +235,13 @@ class TestBase(unittest.TestCase):
 
     def test_pickle(self):
         d = self.cls(self.simple)
-        l = pickle.loads(pickle.dumps(d))
-        self.assertItemsEqual(d.items(), l.items())
+        e = pickle.loads(pickle.dumps(d))
+        self.assertItemsEqual(d.items(), e.items())
 
     def test_json(self):
         d = self.cls(self.simple)
-        l = json.loads(json.dumps(d), object_hook=self.cls)
-        self.assertItemsEqual(d.items(), l.items())
+        e = json.loads(json.dumps(d), object_hook=self.cls)
+        self.assertItemsEqual(d.items(), e.items())
 
     # Add non-existing assertions in python26:
     try:

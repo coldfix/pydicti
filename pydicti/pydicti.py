@@ -198,6 +198,17 @@ def _make_dicti(dict_, normalize=normalize_case):
             """Return iterator over all keys in their original case."""
             return iter(self.__iter__())
 
+        # dict overrides:
+
+        def __ior__(self, other):
+            self.update(other)
+            return self
+
+        def __or__(self, other):
+            d = self.copy()
+            d |= other
+            return d
+
         # Standard operations:
         def __eq__(self, other):
             """Compare values using case insensitive keys."""

@@ -3,6 +3,13 @@ CHANGELOG
 
 1.2.0
 =====
+Date: 25.02.2023
+
+- fix incorrect behaviour of ``__or__`` and ``__ior__``, see #8
+
+
+1.2.0
+=====
 Date: 15.12.2022
 
 - add type hints

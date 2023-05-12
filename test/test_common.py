@@ -197,6 +197,17 @@ class TestBase(unittest.TestCase):
         finally:
             self.checkItems(items, self.items)
 
+    def test_ior(self):
+        d = self.cls({'a': 'a', 'b': 'b'})
+        d |= {'b': 'B', 'c': 'C'}
+        self.checkItems(d.items(), [('a', 'a'), ('b', 'B'), ('c', 'C')])
+
+    def test_or(self):
+        d = self.cls({'a': 'a', 'b': 'b'})
+        e = d | {'b': 'B', 'c': 'C'}
+        self.checkItems(d.items(), [('a', 'a'), ('b', 'b')])
+        self.checkItems(e.items(), [('a', 'a'), ('b', 'B'), ('c', 'C')])
+
     def test_keys(self):
         d = self.cls(self.items)
         self.checkItems(d.keys(), [k for k, v in self.items])

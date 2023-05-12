@@ -10,7 +10,7 @@ Contents:
 - def ``Dicti``: create a case insensitive copy of a given dictionary
 """
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 __all__ = [
     'dicti',
@@ -197,6 +197,17 @@ def _make_dicti(dict_, normalize=normalize_case):
         def iter(self):
             """Return iterator over all keys in their original case."""
             return iter(self.__iter__())
+
+        # dict overrides:
+
+        def __ior__(self, other):
+            self.update(other)
+            return self
+
+        def __or__(self, other):
+            d = self.copy()
+            d |= other
+            return d
 
         # Standard operations:
         def __eq__(self, other):

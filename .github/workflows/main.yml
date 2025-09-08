@@ -35,7 +35,7 @@ jobs:
       - run: twine check dist/*
       - run: flake8
       - run: mypy pydicti
-      - run: mypy --allow-redef test/typing_checks.py
+      - run: mypy --allow-redefinition test/typing_checks.py
       - run: coverage run --source=pydicti -m pytest
 
       - name: Publish PyPI package

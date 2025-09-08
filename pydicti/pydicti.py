@@ -216,7 +216,6 @@ def _make_dicti(dict_, normalize=normalize_case):
                 pass
             elif isinstance(other, _MutableMapping):
                 if not hasattr(other, 'lower_dict'):
-                    global Dicti
                     other = Dicti(other)
             else:
                 return NotImplemented
